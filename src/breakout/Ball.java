@@ -1,7 +1,6 @@
 package breakout;
 
-//comment!
-//comment2!
+//final comment
 
 import javax.swing.ImageIcon;
 
@@ -10,8 +9,7 @@ public class Ball extends Sprite implements Commons {
 
    private int xdir;
    private int ydir;
-
-   protected String ball = "../images/ball.png";
+   protected String ball = "../images/ball.png";//programmers never die
 
    public Ball() {
 
@@ -23,7 +21,6 @@ public class Ball extends Sprite implements Commons {
 
      width = image.getWidth(null);
      heigth = image.getHeight(null);
-
      resetState();
     }
 
