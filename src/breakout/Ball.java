@@ -1,5 +1,4 @@
 package breakout;
-//comment!
 
 import javax.swing.ImageIcon;
 
