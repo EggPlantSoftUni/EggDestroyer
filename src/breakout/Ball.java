@@ -1,16 +1,12 @@
 package breakout;
 
-//heey
 import javax.swing.ImageIcon;
-
-//comment added
 
 public class Ball extends Sprite implements Commons {
 
    private int xdir;
    private int ydir;
-
-   protected String ball = "../images/ball.png";//programmers never die
+   protected String ball = "../images/ball.png";
 
    public Ball() {
 
