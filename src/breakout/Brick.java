@@ -5,7 +5,7 @@ import javax.swing.ImageIcon;
 
 public class Brick extends Sprite {
 
-    String brickie = ""; //../brickie.png
+    String brickie = "../images/brickie.png";
 
     boolean destroyed;
 
