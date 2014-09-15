@@ -3,7 +3,7 @@ package breakout;
 import javax.swing.ImageIcon;
 //Test branch
 public class Ball extends Sprite implements Commons {
-
+//New test of VixY branch
    private int xdir;
    private int ydir;
    protected String ball = "../images/ball.png";
