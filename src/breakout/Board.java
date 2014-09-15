@@ -50,9 +50,8 @@ public class Board extends JPanel implements Commons {
         ball = new Ball();
         paddle = new Paddle();
 
-
         int k = 0;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 1; i < 5; i++) {
             for (int j = 0; j < 15; j++) {
                 bricks[k] = new Brick(j * 35 + 15, i * 50 + 20);
                 k++;
