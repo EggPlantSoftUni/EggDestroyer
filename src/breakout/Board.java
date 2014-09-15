@@ -37,7 +37,7 @@ public class Board extends JPanel implements Commons {
         bricks = new Brick[30];
         setDoubleBuffered(true);
         timer = new Timer();
-        timer.scheduleAtFixedRate(new ScheduleTask(), 1000, 10);
+        timer.scheduleAtFixedRate(new ScheduleTask(), 1000, 8);
     }
 
         public void addNotify() {
