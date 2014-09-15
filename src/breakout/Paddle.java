@@ -58,7 +58,7 @@ public class Paddle extends Sprite implements Commons {
     }
 
     public void resetState() {
-        x = 200;
-        y = 360;
+        x = 400;
+        y = 720;
     }
 }
