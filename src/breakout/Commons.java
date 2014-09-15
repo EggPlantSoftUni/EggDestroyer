@@ -1,9 +1,11 @@
 package breakout;
 
-public interface Commons {
-    public static final int WIDTH = 600;
-    public static final int HEIGTH = 800;
-    public static final int BOTTOM = 780;
-    public static final int PADDLE_RIGHT = 550;
-    public static final int BALL_RIGHT = 590;
+
+public interface Commons { //Declares Game Constants
+    public static final int WIDTH = 600; //width of the screen
+    public static final int HEIGTH = 800; //height of the screen
+    public static final int BOTTOM = 780; //the end of the playing screen 10 pixels away from height
+    public static final int PADDLE_RIGHT = 554; //max distance the paddle can move on the screen(the paddle is 40 pixels wide)
+    public static final int BALL_RIGHT = 590; //max distance the ball can move on the screen(the ball is 10 pixels wide)
+
 }
