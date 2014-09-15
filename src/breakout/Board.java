@@ -34,7 +34,7 @@ public class Board extends JPanel implements Commons {
         addKeyListener(new TAdapter());
         setFocusable(true);
 
-        bricks = new Brick[30];
+        bricks = new Brick[50];
         setDoubleBuffered(true);
         timer = new Timer();
         timer.scheduleAtFixedRate(new ScheduleTask(), 1000, 10);
@@ -53,8 +53,8 @@ public class Board extends JPanel implements Commons {
 
         int k = 0;
         for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 6; j++) {
-                bricks[k] = new Brick(j * 40 + 30, i * 10 + 50);
+            for (int j = 0; j < 10; j++) {
+                bricks[k] = new Brick(j * 35 + 15, i * 50 + 20);
                 k++;
             }
         }
