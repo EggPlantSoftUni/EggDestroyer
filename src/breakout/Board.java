@@ -1,6 +1,8 @@
 package breakout;
 
 import java.awt.Color;
+import javax.swing.ImageIcon;
+import javax.swing.ImageIcon;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -9,11 +11,14 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+
 
 
 public class Board extends JPanel implements Commons { //this contains the game design, mechanics and logic
@@ -25,6 +30,10 @@ public class Board extends JPanel implements Commons { //this contains the game 
     Paddle paddle; //declares the paddle
     Brick bricks[]; //declares the sum of bricks as an array(in this game they are [30])
 
+  
+    
+
+
     boolean ingame = true; //checks whether an instance of the game is active
     int timerId; //timerID ;_;
 
@@ -34,19 +43,12 @@ public class Board extends JPanel implements Commons { //this contains the game 
         addKeyListener(new TAdapter()); //calls the "TAdapter" to add a key listener
         setFocusable(true); //no idea lol
 
-<<<<<<< HEAD
-        bricks = new Brick[75];
-        setDoubleBuffered(true);
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new ScheduleTask(), 1000, 8);
-=======
 
         bricks = new Brick[60]; //sets an array with the number of bricks used
         setDoubleBuffered(true); //double buffer set working
         timer = new Timer(); //creates the game timer
         timer.scheduleAtFixedRate(new ScheduleTask(), 1000, 10); //sets the timer delay to 1000 and the callback time to 10
-
->>>>>>> origin/VixY
+   
     }
 
         public void addNotify() { //no idea lol, has something to do with the class beneath
@@ -60,11 +62,11 @@ public class Board extends JPanel implements Commons { //this contains the game 
         paddle = new Paddle(); //creates the paddle
 
 
+
         int k = 0; //this whole things creates the bricks from the array (30 bricks in total)
         for (int i = 1; i < 5; i++) { // in 5 rows
             for (int j = 0; j < 15; j++) { //with 6 bricks in each row
                 bricks[k] = new Brick(j * 35 + 15, i * 50 + 20); //sets the coordinates of each brick(the first brick is at (30,50) and each brick has a width of 40 and a height of 10
-
                 k++;
             }
         }
@@ -85,9 +87,10 @@ public class Board extends JPanel implements Commons { //this contains the game 
                     g.drawImage(bricks[i].getImage(), bricks[i].getX(), //draws bricks if they're not destroyed
                                 bricks[i].getY(), bricks[i].getWidth(),
                                 bricks[i].getHeight(), this);
+         
             }
-        } else { //if the game has ended
 
+        } else { //if the game has ended
             Font font = new Font("Verdana", Font.BOLD, 18); //declares the fond
             FontMetrics metr = this.getFontMetrics(font); //sets the fond
 
@@ -96,7 +99,9 @@ public class Board extends JPanel implements Commons { //this contains the game 
             g.drawString(message,
                          (Commons.WIDTH - metr.stringWidth(message)) / 2, //game over message
                          Commons.WIDTH / 2);
+
         }
+        
 
         Toolkit.getDefaultToolkit().sync();
         g.dispose(); //toolkit no fucking idea 
@@ -112,6 +117,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
             paddle.keyPressed(e);
         }
     }
+    
 
 
     class ScheduleTask extends TimerTask { //for each call of the timer it calls these function
