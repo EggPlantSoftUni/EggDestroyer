@@ -74,7 +74,9 @@ public class Board extends JPanel implements Commons {
                     g.drawImage(bricks[i].getImage(), bricks[i].getX(),
                                 bricks[i].getY(), bricks[i].getWidth(),
                                 bricks[i].getHeight(), this);
+         
             }
+       
         } else {
 
             Font font = new Font("Verdana", Font.BOLD, 18);
@@ -85,6 +87,7 @@ public class Board extends JPanel implements Commons {
             g.drawString(message,
                          (Commons.WIDTH - metr.stringWidth(message)) / 2,
                          Commons.WIDTH / 2);
+
         }
 
 
