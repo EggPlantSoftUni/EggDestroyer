@@ -1,6 +1,8 @@
 package breakout;
 
 import java.awt.Color;
+import javax.swing.ImageIcon;
+import javax.swing.ImageIcon;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -9,21 +11,24 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 
 public class Board extends JPanel implements Commons {
-
     Image ii;
     Timer timer;
     String message = "Game Over";
     Ball ball;
     Paddle paddle;
     Brick bricks[];
+  
+    
 
     boolean ingame = true;
     int timerId;
@@ -78,6 +83,7 @@ public class Board extends JPanel implements Commons {
             }
        
         } else {
+        	
 
             Font font = new Font("Verdana", Font.BOLD, 18);
             FontMetrics metr = this.getFontMetrics(font);
@@ -89,6 +95,7 @@ public class Board extends JPanel implements Commons {
                          Commons.WIDTH / 2);
 
         }
+        
 
 
         Toolkit.getDefaultToolkit().sync();
@@ -105,6 +112,7 @@ public class Board extends JPanel implements Commons {
             paddle.keyPressed(e);
         }
     }
+    
 
 
     class ScheduleTask extends TimerTask {
