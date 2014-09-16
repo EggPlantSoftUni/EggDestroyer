@@ -5,7 +5,7 @@ import javax.swing.ImageIcon;
 
 public class Background extends Sprite { //the Brick Class
 
-    String background = "../images/background.png"; //creates the path of the used image
+    String background = "../images/background2.png"; //creates the path of the used image
 
 
     public Background(int x, int y) { //decleration of a brick's x and y

@@ -12,7 +12,7 @@ public class Sprite { //"The Sprite class is a base class for all objects on the
 	protected int width;
 	protected int heigth;
 	protected Image image;
-
+	protected Image image1;
 
     public void setX(int x) { //setsX
         this.x = x;
@@ -42,6 +42,11 @@ public class Sprite { //"The Sprite class is a base class for all objects on the
     {
       return image;
     }
+    
+    public Image getImage1() //accesses the image and returns it
+    {
+      return image1;
+    }
 
     public Rectangle getRect() //used for brick
     {
@@ -50,9 +55,21 @@ public class Sprite { //"The Sprite class is a base class for all objects on the
       
     }
     
+    public Rectangle getRect1() //used for brick
+    {
+      return new Rectangle(x, y, 
+          image1.getWidth(null), image1.getHeight(null));
+      
+    }
+    
     public void draw(Graphics g, ImageObserver observer) {
     	if (image != null)
     		g.drawImage(image, x, y, width, heigth, observer);
+    }
+    
+    public void draw1(Graphics g, ImageObserver observer) {
+    	if (image1 != null)
+    		g.drawImage(image1, x, y, width, heigth, observer);
     }
     
     
