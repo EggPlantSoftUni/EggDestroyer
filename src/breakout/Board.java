@@ -76,16 +76,17 @@ public class Board extends JPanel implements Commons { //this contains the game 
 
         if (ingame) { //paints/repaints if the game is in process (refer to "in game")
         	g.drawImage(bg.getImage(), bg.getX(), bg.getY(), //draws the paddle
-                    bg.getWidth(), bg.getHeight(), this);
-            /*g.drawImage(ball.getImage(), ball.getX(), ball.getY(), //draws the ball
-                        ball.getWidth(), ball.getHeight(), this); 
-            g.drawImage(paddle.getImage(), paddle.getX(), paddle.getY(), //draws the paddle
-                        paddle.getWidth(), paddle.getHeight(), this);*/            
-         
+                    bg.getWidth(), bg.getHeight(), this);         
 
-            for (int i = 0; i < 68; i++) { //for each of the 68 bricks
-                if (!bricks[i].isDestroyed()) //checks if the brick has been destroyed
-                	bricks[i].draw(g,  this);
+        	for (int i = 0; i < 68; i++) { //for each of the 30 bricks
+                if (!bricks[i].isDestroyed()){ 
+                	if (!bricks[i].isCracked() && !bricks[i].isDestroyed()){
+                		bricks[i].draw(g,  this);
+                	}
+                	else{
+                		bricks[i].draw1(g, this);
+                	}
+                }       	
             }
             
             for (Bonus bonum : bonusList)
@@ -227,37 +228,57 @@ public class Board extends JPanel implements Commons { //this contains the game 
                 Point pointBottom =
                     new Point(ballLeft, ballTop + ballHeight + 1); //this is the up side of the bricks
 
-                Brick brick = bricks[i];
+                Brick brick = bricks[i];  
                 if (!brick.isDestroyed()) { //if the brick has not yet been destroyed
-                    if (brick.getRect().contains(pointRight)) { //sets the motion after the collision left
-                        ball.setXDir(-1);
-                    }
+                	if (!brick.isCracked()){
+                		if (brick.getRect().contains(pointRight)) { //sets the motion after the collision left
+                            ball.setXDir(-1);
+                        }
 
-                    else if (brick.getRect().contains(pointLeft)) { //sets is right
-                        ball.setXDir(1);
-                    }
+                        else if (brick.getRect().contains(pointLeft)) { //sets is right
+                            ball.setXDir(1);
+                        }
 
-                    if (brick.getRect().contains(pointTop)) { //sets it downwards
-                        ball.setYDir(1);
-                    }
+                        if (brick.getRect().contains(pointTop)) { //sets it downwards
+                            ball.setYDir(1);
+                        }
 
-                    else if (brick.getRect().contains(pointBottom)) { //sets is upwards
-                        ball.setYDir(-1);
-                    }
+                        else if (brick.getRect().contains(pointBottom)) { //sets is upwards
+                            ball.setYDir(-1);
+                        }
 
-                    brick.setDestroyed(true); //destroys the brick
-                    score += brickpoints;
-                    
-                    Random rand = new Random();
-                    if (rand.nextInt(4) == 0) {
-	                    Bonus bonus = new Bonus();
-	                    bonus.setX(brick.getX() + (brick.getWidth() - bonus.getWidth()) / 2);
-	                    bonus.setY(brick.getY() + (brick.getHeight() - bonus.getHeight()) / 2);
-	                    bonusList.add(bonus);
-                    }
+                        brick.setCracked(true); //destroys the brick
+                	}
+                	else {
+                		if (brick.getRect1().contains(pointRight)) { //sets the motion after the collision left
+                            ball.setXDir(-1);
+                        }
+
+                        else if (brick.getRect1().contains(pointLeft)) { //sets is right
+                            ball.setXDir(1);
+                        }
+
+                        if (brick.getRect1().contains(pointTop)) { //sets it downwards
+                            ball.setYDir(1);
+                        }
+
+                        else if (brick.getRect1().contains(pointBottom)) { //sets is upwards
+                            ball.setYDir(-1);
+                        }
+
+                        brick.setDestroyed(true); //destroys the brick
+                        score += brickpoints;
+                        
+                        Random rand = new Random();
+                        if (rand.nextInt(4) == 0) {
+    	                    Bonus bonus = new Bonus();
+    	                    bonus.setX(brick.getX() + (brick.getWidth() - bonus.getWidth()) / 2);
+    	                    bonus.setY(brick.getY() + (brick.getHeight() - bonus.getHeight()) / 2);
+    	                    bonusList.add(bonus);
+                        }
                 }
             }
         }
         
     }
-}
+}}
