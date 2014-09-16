@@ -26,6 +26,10 @@ public class Board extends JPanel implements Commons { //this contains the game 
     Brick bricks[];//declares the sum of bricks as an array(in this game they are [30])
     int[] count = new int[68];
     int destroyedCount = 0;
+    int score = 0;
+    String scr = Integer.toString(score);
+    Font font = new Font("Verdana", Font.BOLD, 18); //declares the fond
+    FontMetrics metr = this.getFontMetrics(font); //sets the fond
     
 
     boolean ingame = true; //checks whether an instance of the game is active
@@ -78,6 +82,8 @@ public class Board extends JPanel implements Commons { //this contains the game 
                         ball.getWidth(), ball.getHeight(), this); 
             g.drawImage(paddle.getImage(), paddle.getX(), paddle.getY(), //draws the paddle
                         paddle.getWidth(), paddle.getHeight(), this);
+            g.drawString(scr, (Commons.WIDTH - metr.stringWidth(message)) / 2, //game over message
+            Commons.WIDTH / 2);
             
          
 
@@ -88,9 +94,6 @@ public class Board extends JPanel implements Commons { //this contains the game 
                                 bricks[i].getHeight(), this);
             }
         } else { //if the game has ended
-
-            Font font = new Font("Verdana", Font.BOLD, 18); //declares the fond
-            FontMetrics metr = this.getFontMetrics(font); //sets the fond
 
             g.setColor(Color.BLACK);
             g.setFont(font);
@@ -219,11 +222,11 @@ public class Board extends JPanel implements Commons { //this contains the game 
                     else if (bricks[i].getRect().contains(pointBottom)) { //sets is upwards
                         ball.setYDir(-1);
                     }
-                    bricks[i].setDestroyed(false); // sets the brick not destroyet after the first hit
+                    bricks[i].setDestroyed(true);
+                    /*bricks[i].setDestroyed(false); // sets the brick not destroyet after the first hit
                     count[i]++; // sets the brick coutner ++
-                    if(count[i] == 2) bricks[i].setDestroyed(true); //destroys the brick if it is hitted 2 times
-                    
-                    
+                    if(count[i] == 2) bricks[i].setDestroyed(true); //destroys the brick if it is hitted 2 times                 
+*/                    
                 }
             }
         }
