@@ -9,7 +9,8 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -18,17 +19,17 @@ import javax.swing.JPanel;
 
 public class Board extends JPanel implements Commons { //this contains the game design, mechanics and logic
 
-    Image ii; //declares the image
+    Image ii;//declares the image
     Timer timer; //declares the timer
     String message = "Game Over"; //declares the game over message
     Ball ball; //declares the ball
     Paddle paddle; //declares the paddle
-    Brick bricks[];//declares the sum of bricks as an array(in this game they are [30])
-    CrackedBrick crackedBricks[];
-    public int[] count = new int[68];
-    int destroyedCount = 0;
+    Brick bricks[]; 
+    ArrayList<Bonus> bonusList;//declares the sum of bricks as an array(in this game they are [30])
+    int score = 0;
+    int brickpoints = 10;
+    int bonuspoints = 30;
     
-
     boolean ingame = true; //checks whether an instance of the game is active
     int timerId; //timerID ;_;
 
@@ -38,12 +39,11 @@ public class Board extends JPanel implements Commons { //this contains the game 
         addKeyListener(new TAdapter()); //calls the "TAdapter" to add a key listener
         setFocusable(true); //no idea lol
 
-
-        bricks = new Brick[68]; //sets an array with the number of bricks used
+        bricks = new Brick[36]; //sets an array with the number of bricks used
+        bonusList = new ArrayList<Bonus>();
         setDoubleBuffered(true); //double buffer set working
         timer = new Timer(); //creates the game timer
-        timer.scheduleAtFixedRate(new ScheduleTask(), 1000, 6); //sets the timer delay to 1000 and the callback time to 10
-
+        timer.scheduleAtFixedRate(new ScheduleTask(), 1000, 10); //sets the timer delay to 1000 and the callback time to 10
     }
 
         public void addNotify() { //no idea lol, has something to do with the class beneath
@@ -57,20 +57,11 @@ public class Board extends JPanel implements Commons { //this contains the game 
         paddle = new Paddle(); //creates the paddle
 
 
-        int k = 0;
-        //this whole things creates the bricks from the array (30 bricks in total)
-        for (int i = 1; i < 5; i++) { // in 5 rows
-            for (int j = 0; j < 17; j++) { //with 6 bricks in each row
-            	if(count[i] == 0){
-                bricks[k] = new Brick(j * 32 + 15, i * 40 + 20); //sets the coordinates of each brick(the first brick is at (30,50) and each brick has a width of 40 and a height of 10
+        int k = 0; //this whole things creates the bricks from the array (30 bricks in total)
+        for (int i = 0; i < 6; i++) { // in 5 rows
+            for (int j = 0; j < 6; j++) { //with 6 bricks in each row
+                bricks[k] = new Brick(j * 40 + 30, i * 10 + 50); //sets the coordinates of each brick(the first brick is at (30,50) and each brick has a width of 40 and a height of 10
                 k++;
-                count[i]++;
-            	}
-            	else{
-            		crackedBricks[k] = new CrackedBrick(j * 32 + 15, i * 40 + 20);
-            		k++;
-            	}
-            		
             }
         }
     }
@@ -80,19 +71,31 @@ public class Board extends JPanel implements Commons { //this contains the game 
         super.paint(g);
 
         if (ingame) { //paints/repaints if the game is in process (refer to "in game")
-            g.drawImage(ball.getImage(), ball.getX(), ball.getY(), //draws the ball
-                        ball.getWidth(), ball.getHeight(), this); 
-            g.drawImage(paddle.getImage(), paddle.getX(), paddle.getY(), //draws the paddle
-                        paddle.getWidth(), paddle.getHeight(), this);
-            
-         
 
-            for (int i = 0; i < 68; i++) { //for each of the 30 bricks
-                if (!bricks[i].isDestroyed()) //checks if the brick has been destroyed
-                    g.drawImage(bricks[i].getImage(), bricks[i].getX(), //draws bricks if they're not destroyed
-                                bricks[i].getY(), bricks[i].getWidth(),
-                                bricks[i].getHeight(), this);
+            for (int i = 0; i < 36; i++) { //for each of the 30 bricks
+                if (!bricks[i].isDestroyed()){ 
+                	if (!bricks[i].isCracked() && !bricks[i].isDestroyed()){
+                		bricks[i].draw(g,  this);
+                	}
+                	else{
+                		bricks[i].draw1(g, this);
+                	}
+                }       	
             }
+            
+            for (Bonus bonum : bonusList)
+            	bonum.draw(g,  this);
+            
+        	paddle.draw(g, this);
+        	ball.draw(g, this);
+        	Font font = new Font("Verdana", Font.BOLD, 18); //declares the fond
+            FontMetrics metr = this.getFontMetrics(font); //sets the fond
+        	String scorestring = Integer.toString(score);
+        	g.setColor(Color.BLACK);
+            g.setFont(font);
+            g.drawString(scorestring,
+                         (Commons.WIDTH - this.getFontMetrics(font).stringWidth(scorestring)) - 20, //game over message
+                         Commons.WIDTH - 280);
         } else { //if the game has ended
 
             Font font = new Font("Verdana", Font.BOLD, 18); //declares the fond
@@ -126,7 +129,9 @@ public class Board extends JPanel implements Commons { //this contains the game 
         public void run() { //runs them (calls them), these are called every 10 msecs
 
             ball.move(); //ball moves
-            paddle.move(); //paddle moves
+            paddle.move(); 
+            for (Bonus bonus : bonusList)
+               	bonus.move();
             checkCollision(); //checks for a collision
             repaint(); //repaints the new screen with new position and remaining bricks
 
@@ -145,11 +150,11 @@ public class Board extends JPanel implements Commons { //this contains the game 
             stopGame(); //Game Over
         }
 
-        for (int i = 0, j = 0; i < 68; i++) { //counts the destroyed bricks
+        for (int i = 0, j = 0; i < 36; i++) { //counts the destroyed bricks
             if (bricks[i].isDestroyed()) {
                 j++;
             }
-            if (j == 68) { //if you have destroyed all 30 you win
+            if (j == 36) { //if you have destroyed all 30 you win
                 message = "Victory";
                 stopGame();
             }
@@ -192,9 +197,20 @@ public class Board extends JPanel implements Commons { //this contains the game 
 
 
         }
+        
+        
+        for (int index = bonusList.size() - 1; 0 <= index; index--) {
+        	Bonus bonus = bonusList.get(index);
+            if ((bonus.getRect()).intersects(paddle.getRect())) {
+            	score += bonuspoints;
+            	bonusList.remove(index);
+            }
+            else if (bonus.getRect().getMaxY() > Commons.BOTTOM) {
+            	bonusList.remove(index);
+            }
+        }
 
-
-        for (int i = 0; i < 68; i++) { //for each of the 30 bricks
+        for (int i = 0; i < 36; i++) { //for each of the 30 bricks
             if ((ball.getRect()).intersects(bricks[i].getRect())) { //checks if the balls has hit a brick
                 int ballLeft = (int)ball.getRect().getMinX();
                 int ballHeight = (int)ball.getRect().getHeight();
@@ -207,32 +223,59 @@ public class Board extends JPanel implements Commons { //this contains the game 
                 Point pointTop = new Point(ballLeft, ballTop - 1); //this is the down side of the bricks
                 Point pointBottom =
                     new Point(ballLeft, ballTop + ballHeight + 1); //this is the up side of the bricks
-                
-  
-                if (!bricks[i].isDestroyed()) { //if the brick has not yet been destroyed
-                    if (bricks[i].getRect().contains(pointRight)) { //sets the motion after the collision left
-                        ball.setXDir(-1);
-                    }
 
-                    else if (bricks[i].getRect().contains(pointLeft)) { //sets is right
-                        ball.setXDir(1);
-                    }
+                Brick brick = bricks[i];  
+                if (!brick.isDestroyed()) { //if the brick has not yet been destroyed
+                	if (!brick.isCracked()){
+                		if (brick.getRect().contains(pointRight)) { //sets the motion after the collision left
+                            ball.setXDir(-1);
+                        }
 
-                    if (bricks[i].getRect().contains(pointTop)) { //sets it downwards
-                        ball.setYDir(1);
-                    }
+                        else if (brick.getRect().contains(pointLeft)) { //sets is right
+                            ball.setXDir(1);
+                        }
 
-                    else if (bricks[i].getRect().contains(pointBottom)) { //sets is upwards
-                        ball.setYDir(-1);
-                    }
-                    bricks[i].setDestroyed(false); // sets the brick not destroyet after the first hit
-                    count[i]++; // sets the brick coutner ++
-                    if(count[i] == 2) bricks[i].setDestroyed(true); //destroys the brick if it is hitted 2 times
-                    
-                    
+                        if (brick.getRect().contains(pointTop)) { //sets it downwards
+                            ball.setYDir(1);
+                        }
+
+                        else if (brick.getRect().contains(pointBottom)) { //sets is upwards
+                            ball.setYDir(-1);
+                        }
+
+                        brick.setCracked(true); //destroys the brick
+                	}
+                	else {
+                		if (brick.getRect1().contains(pointRight)) { //sets the motion after the collision left
+                            ball.setXDir(-1);
+                        }
+
+                        else if (brick.getRect1().contains(pointLeft)) { //sets is right
+                            ball.setXDir(1);
+                        }
+
+                        if (brick.getRect1().contains(pointTop)) { //sets it downwards
+                            ball.setYDir(1);
+                        }
+
+                        else if (brick.getRect1().contains(pointBottom)) { //sets is upwards
+                            ball.setYDir(-1);
+                        }
+
+                        brick.setDestroyed(true); //destroys the brick
+                        score += brickpoints;
+                        
+                        Random rand = new Random();
+                        if (rand.nextInt(4) == 0) {
+    	                    Bonus bonus = new Bonus();
+    	                    bonus.setX(brick.getX() + (brick.getWidth() - bonus.getWidth()) / 2);
+    	                    bonus.setY(brick.getY() + (brick.getHeight() - bonus.getHeight()) / 2);
+    	                    bonusList.add(bonus);
+                        }
+                    }    
                 }
             }
         }
-        
     }
 }
+    

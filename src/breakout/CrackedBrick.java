@@ -5,33 +5,38 @@ import javax.swing.ImageIcon;
 
 public class CrackedBrick extends Sprite { //the Brick Class
 
-    String cracked = "../images/BrokenEgg.png";
+    String crackedBrick = "../images/BrokenEgg.png"; //creates the path of the used image
 
-    boolean crackedEgg; //bool that indicates whether a brick has been destroyed or not
+     //bool that indicates whether a brick has been destroyed or not
+    boolean cracked;
+
 
 
     public CrackedBrick(int x, int y) { //decleration of a brick's x and y
       this.x = x;
       this.y = y;
-      ImageIcon ii = new ImageIcon(this.getClass().getResource(cracked)); //creates the brick image icon
-      image = ii.getImage(); //calls the "getImage" from "Sprites.java"
+      ImageIcon ii2 = new ImageIcon(this.getClass().getResource(crackedBrick)); //creates the brick image icon
+      image = ii2.getImage(); //calls the "getImage" from "Sprites.java"
       
 
       width = image.getWidth(null); //set the width and height of the used image
       heigth = image.getHeight(null);
 
-      crackedEgg = false; //declares that the created bicks have not been destroyed
+      cracked = false; //declares that the created bicks have not been destroyed
+ 
     }
  
+ 
 
-    public boolean isCrackedEgg() //function that checks whether a brick is destroyed or not
+    public boolean isCracked() //function that checks whether a brick is destroyed or not
     {
-      return crackedEgg;
+      return cracked;
     }
 
-    public void setCrackedEgg(boolean destroyed) //changes the bool of a brick to destroyed == true when the ball hits a brick
+    public void setCracked(boolean cracked) //changes the bool of a brick to destroyed == true when the ball hits a brick
     {
-      this.crackedEgg = crackedEgg;
+      this.cracked = cracked;
     }
+   
     
 }
