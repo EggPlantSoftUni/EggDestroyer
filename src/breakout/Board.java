@@ -83,7 +83,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
                         paddle.getWidth(), paddle.getHeight(), this);
 
             for (int i = 0; i < 60; i++) { //for each of the 30 bricks
-                if (!bricks[i].isDestroyed()) //checks if the brick has been destroyed
+                if (!bricks[i].isCracked()) //checks if the brick has been destroyed
                     g.drawImage(bricks[i].getImage(), bricks[i].getX(), //draws bricks if they're not destroyed
                                 bricks[i].getY(), bricks[i].getWidth(),
                                 bricks[i].getHeight(), this);
@@ -207,7 +207,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
                 Point pointBottom =
                     new Point(ballLeft, ballTop + ballHeight + 1); //this is the up side of the bricks
 
-                if (!bricks[i].isCracked()) { //if the brick has not yet been destroyed
+                if (!bricks[i].isCracked()) { //if the brick has not yet been cracked
                     if (bricks[i].getRect().contains(pointRight)) { //sets the motion after the collision left
                         ball.setXDir(-1);
                     }
@@ -229,25 +229,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
                 
                 
                 
-                if (!bricks[i].isDestroyed()) { //if the brick has not yet been destroyed
-                    if (bricks[i].getRect().contains(pointRight)) { //sets the motion after the collision left
-                        ball.setXDir(-1);
-                    }
-
-                    else if (bricks[i].getRect().contains(pointLeft)) { //sets is right
-                        ball.setXDir(1);
-                    }
-
-                    if (bricks[i].getRect().contains(pointTop)) { //sets it downwards
-                        ball.setYDir(1);
-                    }
-
-                    else if (bricks[i].getRect().contains(pointBottom)) { //sets is upwards
-                        ball.setYDir(-1);
-                    }
-
-                   if(bricks[i].isCracked()) bricks[i].setDestroyed(true); //destroys the brick
-                }
+               
                 }
             }
         }

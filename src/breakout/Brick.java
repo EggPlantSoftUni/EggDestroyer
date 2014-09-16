@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 public class Brick extends Sprite { //the Brick Class
 
     String brickie = "../images/brickie.png"; //creates the path of the used image
+    String brickie_cracked = "../images/brickie_cracked.png";
 
     boolean destroyed;//bool that indicates whether a brick has been destroyed or not
     boolean cracked;
@@ -14,6 +15,12 @@ public class Brick extends Sprite { //the Brick Class
     public Brick(int x, int y) { //decleration of a brick's x and y
       this.x = x;
       this.y = y;
+      
+      ImageIcon ii2 = new ImageIcon(this.getClass().getResource(brickie_cracked));
+      image = ii2.getImage();
+      
+      width = image.getWidth(null); //set the width and height of the used image
+      heigth = image.getHeight(null);
 
       ImageIcon ii = new ImageIcon(this.getClass().getResource(brickie)); //creates the brick image icon
       image = ii.getImage(); //calls the "getImage" from "Sprites.java"
