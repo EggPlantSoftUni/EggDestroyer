@@ -1,7 +1,9 @@
 package breakout;
 
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.image.ImageObserver;
 
 public class Sprite { //"The Sprite class is a base class for all objects on the Board. We put here all methods and variables that are in Ball, Brick and Paddle objects. Like getImage() or getX() methods."
 
@@ -36,14 +38,21 @@ public class Sprite { //"The Sprite class is a base class for all objects on the
         return heigth;
     }
 
-    Image getImage() //accesses the image and returns it
+    public Image getImage() //accesses the image and returns it
     {
       return image;
     }
 
-    Rectangle getRect() //used for brick
+    public Rectangle getRect() //used for brick
     {
       return new Rectangle(x, y, 
           image.getWidth(null), image.getHeight(null));
     }
+    
+    public void draw(Graphics g, ImageObserver observer) {
+    	if (image != null)
+    		g.drawImage(image, x, y, width, heigth, observer);
+    }
+    
+    
 }
