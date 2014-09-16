@@ -56,7 +56,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
         int k = 0; //this whole things creates the bricks from the array (30 bricks in total)
         for (int i = 1; i < 5; i++) { // in 5 rows
             for (int j = 0; j < 17; j++) { //with 6 bricks in each row
-                bricks[k] = new Brick(j * 32 + 15, i * 40 + 20); //sets the coordinates of each brick(the first brick is at (30,50) and each brick has a width of 40 and a height of 10
+                bricks[k] = new Brick(j * 32 + 15, i * 35 + 20); //sets the coordinates of each brick(the first brick is at (30,50) and each brick has a width of 40 and a height of 10
 
                 k++;
             }
