@@ -1,11 +1,6 @@
 package breakout;
 
 import javax.swing.ImageIcon;
-<<<<<<< HEAD
-
-public class Ball extends Sprite implements Commons {
-=======
->>>>>>> origin/Bari
 
 public class Ball extends Sprite implements Commons { //holds the definitions of ball
 

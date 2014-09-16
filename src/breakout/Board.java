@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 
 
 public class Board extends JPanel implements Commons { //this contains the game design, mechanics and logic
-
+	private Background bg;
     Image ii; //declares the image
     Timer timer; //declares the timer
     String message = "Game Over"; //declares the game over message
@@ -54,6 +54,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
 
         ball = new Ball(); //creates the ball
         paddle = new Paddle(); //creates the paddle
+        bg = new Background(0,0);
 
 
         int k = 0; //this whole things creates the bricks from the array (30 bricks in total)
@@ -71,6 +72,8 @@ public class Board extends JPanel implements Commons { //this contains the game 
         super.paint(g);
 
         if (ingame) { //paints/repaints if the game is in process (refer to "in game")
+        	g.drawImage(bg.getImage(), bg.getX(), bg.getY(), //draws the paddle
+                    bg.getWidth(), bg.getHeight(), this);
             g.drawImage(ball.getImage(), ball.getX(), ball.getY(), //draws the ball
                         ball.getWidth(), ball.getHeight(), this); 
             g.drawImage(paddle.getImage(), paddle.getX(), paddle.getY(), //draws the paddle

@@ -3,15 +3,6 @@ package breakout;
 import java.awt.Image;
 import java.awt.Rectangle;
 
-<<<<<<< HEAD
-public class Sprite {
-//go to a new branch!
-    protected int x;
-    protected int y;
-    protected int width;
-    protected int heigth;
-    protected Image image;
-=======
 public class Sprite { //"The Sprite class is a base class for all objects on the Board. We put here all methods and variables that are in Ball, Brick and Paddle objects. Like getImage() or getX() methods."
 
 	protected int x; //declaration of the variable(note that whether they're protected or public does not affect the game, but lets leave them as protected
@@ -19,7 +10,6 @@ public class Sprite { //"The Sprite class is a base class for all objects on the
 	protected int width;
 	protected int heigth;
 	protected Image image;
->>>>>>> origin/Bari
 
 
     public void setX(int x) { //setsX
