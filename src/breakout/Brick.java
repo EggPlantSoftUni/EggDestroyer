@@ -9,7 +9,7 @@ public class Brick extends Sprite { //the Brick Class
 
     boolean destroyed; //bool that indicates whether a brick has been destroyed or not
     
-    String brBrickie = "../images/brBrickie.png";
+    String brBrickie = "../images/brikieGreen.png";
     
     boolean cracked;  // bool that indicates whether an egg is cracked or not 
 
@@ -19,19 +19,20 @@ public class Brick extends Sprite { //the Brick Class
       this.x = x;
       this.y = y;
       
-      if (!destroyed && !cracked) {	
-      ImageIcon ii = new ImageIcon(this.getClass().getResource(brickie)); //creates the brick image icon
-      image = ii.getImage(); //calls the "getImage" from "Sprites.java"
-      }    
-      if (!destroyed && cracked) {
-    	  ImageIcon ii = new ImageIcon(this.getClass().getResource(brBrickie)); //creates the brick image icon
-          image = ii.getImage(); //calls the "getImage" from "Sprites.java"
-      }
-      
+	      if (!destroyed && !cracked) {	
+	      ImageIcon ii = new ImageIcon(this.getClass().getResource(brickie)); //creates the brick image icon
+	      image = ii.getImage(); //calls the "getImage" from "Sprites.java"
+	      }   
+	      else{
+	    	  ImageIcon ii = new ImageIcon(this.getClass().getResource(brBrickie)); //creates the brick image icon
+	          image = ii.getImage(); //calls the "getImage" from "Sprites.java"
+	      }
+	      
       width = image.getWidth(null); //set the width and height of the used image
       heigth = image.getHeight(null);
 
       destroyed = false; //declares that the created bicks have not been destroyed
+     // cracked = false;
     }
     
         
