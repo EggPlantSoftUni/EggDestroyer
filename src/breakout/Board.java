@@ -1,8 +1,6 @@
 package breakout;
 
 import java.awt.Color;
-import javax.swing.ImageIcon;
-import javax.swing.ImageIcon;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -11,14 +9,11 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.File;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-
 
 
 public class Board extends JPanel implements Commons { //this contains the game design, mechanics and logic
@@ -29,10 +24,6 @@ public class Board extends JPanel implements Commons { //this contains the game 
     Ball ball; //declares the ball
     Paddle paddle; //declares the paddle
     Brick bricks[]; //declares the sum of bricks as an array(in this game they are [30])
-
-  
-    
-
 
     boolean ingame = true; //checks whether an instance of the game is active
     int timerId; //timerID ;_;
@@ -47,9 +38,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
         bricks = new Brick[68]; //sets an array with the number of bricks used
         setDoubleBuffered(true); //double buffer set working
         timer = new Timer(); //creates the game timer
-
         timer.scheduleAtFixedRate(new ScheduleTask(), 1000, 8); //sets the timer delay to 1000 and the callback time to 10
-
 
     }
 
@@ -64,13 +53,10 @@ public class Board extends JPanel implements Commons { //this contains the game 
         paddle = new Paddle(); //creates the paddle
 
 
-
         int k = 0; //this whole things creates the bricks from the array (30 bricks in total)
         for (int i = 1; i < 5; i++) { // in 5 rows
-
             for (int j = 0; j < 17; j++) { //with 6 bricks in each row
                 bricks[k] = new Brick(j * 32 + 15, i * 40 + 20); //sets the coordinates of each brick(the first brick is at (30,50) and each brick has a width of 40 and a height of 10
-
 
                 k++;
             }
@@ -87,17 +73,14 @@ public class Board extends JPanel implements Commons { //this contains the game 
             g.drawImage(paddle.getImage(), paddle.getX(), paddle.getY(), //draws the paddle
                         paddle.getWidth(), paddle.getHeight(), this);
 
-
             for (int i = 0; i < 68; i++) { //for each of the 30 bricks
                 if (!bricks[i].isDestroyed()) //checks if the brick has been destroyed
-
                     g.drawImage(bricks[i].getImage(), bricks[i].getX(), //draws bricks if they're not destroyed
                                 bricks[i].getY(), bricks[i].getWidth(),
                                 bricks[i].getHeight(), this);
-         
             }
-
         } else { //if the game has ended
+
             Font font = new Font("Verdana", Font.BOLD, 18); //declares the fond
             FontMetrics metr = this.getFontMetrics(font); //sets the fond
 
@@ -106,9 +89,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
             g.drawString(message,
                          (Commons.WIDTH - metr.stringWidth(message)) / 2, //game over message
                          Commons.WIDTH / 2);
-
         }
-        
 
         Toolkit.getDefaultToolkit().sync();
         g.dispose(); //toolkit no fucking idea 
@@ -124,7 +105,6 @@ public class Board extends JPanel implements Commons { //this contains the game 
             paddle.keyPressed(e);
         }
     }
-    
 
 
     class ScheduleTask extends TimerTask { //for each call of the timer it calls these function
@@ -155,9 +135,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
             if (bricks[i].isDestroyed()) {
                 j++;
             }
-
             if (j == 68) { //if you have destroyed all 30 you win
-
                 message = "Victory";
                 stopGame();
             }
@@ -216,7 +194,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
                 Point pointBottom =
                     new Point(ballLeft, ballTop + ballHeight + 1); //this is the up side of the bricks
 
-                if (!bricks[i].isCracked()) { //if the brick has not yet been cracked
+                if (!bricks[i].isDestroyed()) { //if the brick has not yet been destroyed
                     if (bricks[i].getRect().contains(pointRight)) { //sets the motion after the collision left
                         ball.setXDir(-1);
                     }
@@ -233,12 +211,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
                         ball.setYDir(-1);
                     }
 
-                   bricks[i].setCracked(true); //destroys the brick
-                
-                
-                
-                
-               
+                    bricks[i].setDestroyed(true); //destroys the brick
                 }
             }
         }
