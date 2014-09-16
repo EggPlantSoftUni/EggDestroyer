@@ -47,7 +47,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
         bricks = new Brick[60]; //sets an array with the number of bricks used
         setDoubleBuffered(true); //double buffer set working
         timer = new Timer(); //creates the game timer
-        timer.scheduleAtFixedRate(new ScheduleTask(), 1000, 10); //sets the timer delay to 1000 and the callback time to 10
+        timer.scheduleAtFixedRate(new ScheduleTask(), 1000, 5); //sets the timer delay to 1000 and the callback time to 10
    
     }
 
@@ -148,7 +148,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
             if (bricks[i].isDestroyed()) {
                 j++;
             }
-            if (j == 30) { //if you have destroyed all 30 you win
+            if (j == 60) { //if you have destroyed all 30 you win
                 message = "Victory";
                 stopGame();
             }
@@ -207,6 +207,28 @@ public class Board extends JPanel implements Commons { //this contains the game 
                 Point pointBottom =
                     new Point(ballLeft, ballTop + ballHeight + 1); //this is the up side of the bricks
 
+                if (!bricks[i].isCracked()) { //if the brick has not yet been destroyed
+                    if (bricks[i].getRect().contains(pointRight)) { //sets the motion after the collision left
+                        ball.setXDir(-1);
+                    }
+
+                    else if (bricks[i].getRect().contains(pointLeft)) { //sets is right
+                        ball.setXDir(1);
+                    }
+
+                    if (bricks[i].getRect().contains(pointTop)) { //sets it downwards
+                        ball.setYDir(1);
+                    }
+
+                    else if (bricks[i].getRect().contains(pointBottom)) { //sets is upwards
+                        ball.setYDir(-1);
+                    }
+
+                   bricks[i].setCracked(true); //destroys the brick
+                
+                
+                
+                
                 if (!bricks[i].isDestroyed()) { //if the brick has not yet been destroyed
                     if (bricks[i].getRect().contains(pointRight)) { //sets the motion after the collision left
                         ball.setXDir(-1);
@@ -224,7 +246,8 @@ public class Board extends JPanel implements Commons { //this contains the game 
                         ball.setYDir(-1);
                     }
 
-                    bricks[i].setDestroyed(true); //destroys the brick
+                   if(bricks[i].isCracked()) bricks[i].setDestroyed(true); //destroys the brick
+                }
                 }
             }
         }
