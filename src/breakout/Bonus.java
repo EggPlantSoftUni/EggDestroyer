@@ -9,7 +9,9 @@ public class Bonus extends Sprite { //holds the definitions of ball
    private int xbdir; //declares the direction of motion of the ball
    private int ybdir;
    protected String bonus = "../images/bonus.png"; //declares the path of the ball image
+   protected String Death = "../images/skull.png";
    boolean existing;
+   boolean exsitingDeath;
 
    public Bonus() { 
 
@@ -18,12 +20,16 @@ public class Bonus extends Sprite { //holds the definitions of ball
 
      ImageIcon ii = new ImageIcon(this.getClass().getResource(bonus)); //creates the used icon for the ball
      image = ii.getImage(); //calls the "getImage" function to display it
+     
+
 
      width = image.getWidth(null); //sets the width of the ball
      heigth = image.getHeight(null); //sets the heights of the ball
+     
      resetState(); //places the ball in its initial position
      
      existing = false;
+     exsitingDeath = false;
     }
 
 
