@@ -44,11 +44,16 @@ public class Board extends JPanel implements Commons { //this contains the game 
         setFocusable(true); //no idea lol
 
 
-        bricks = new Brick[60]; //sets an array with the number of bricks used
+        bricks = new Brick[68]; //sets an array with the number of bricks used
         setDoubleBuffered(true); //double buffer set working
         timer = new Timer(); //creates the game timer
+<<<<<<< HEAD
         timer.scheduleAtFixedRate(new ScheduleTask(), 1000, 10); //sets the timer delay to 1000 and the callback time to 10
    
+=======
+        timer.scheduleAtFixedRate(new ScheduleTask(), 1000, 8); //sets the timer delay to 1000 and the callback time to 10
+
+>>>>>>> origin/VixY
     }
 
         public void addNotify() { //no idea lol, has something to do with the class beneath
@@ -65,8 +70,14 @@ public class Board extends JPanel implements Commons { //this contains the game 
 
         int k = 0; //this whole things creates the bricks from the array (30 bricks in total)
         for (int i = 1; i < 5; i++) { // in 5 rows
+<<<<<<< HEAD
             for (int j = 0; j < 15; j++) { //with 6 bricks in each row
                 bricks[k] = new Brick(j * 35 + 15, i * 50 + 20); //sets the coordinates of each brick(the first brick is at (30,50) and each brick has a width of 40 and a height of 10
+=======
+            for (int j = 0; j < 17; j++) { //with 6 bricks in each row
+                bricks[k] = new Brick(j * 32 + 15, i * 40 + 20); //sets the coordinates of each brick(the first brick is at (30,50) and each brick has a width of 40 and a height of 10
+
+>>>>>>> origin/VixY
                 k++;
             }
         }
@@ -82,7 +93,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
             g.drawImage(paddle.getImage(), paddle.getX(), paddle.getY(), //draws the paddle
                         paddle.getWidth(), paddle.getHeight(), this);
 
-            for (int i = 0; i < 60; i++) { //for each of the 30 bricks
+            for (int i = 0; i < 68; i++) { //for each of the 30 bricks
                 if (!bricks[i].isDestroyed()) //checks if the brick has been destroyed
                     g.drawImage(bricks[i].getImage(), bricks[i].getX(), //draws bricks if they're not destroyed
                                 bricks[i].getY(), bricks[i].getWidth(),
@@ -144,11 +155,11 @@ public class Board extends JPanel implements Commons { //this contains the game 
             stopGame(); //Game Over
         }
 
-        for (int i = 0, j = 0; i < 60; i++) { //counts the destroyed bricks
+        for (int i = 0, j = 0; i < 68; i++) { //counts the destroyed bricks
             if (bricks[i].isDestroyed()) {
                 j++;
             }
-            if (j == 30) { //if you have destroyed all 30 you win
+            if (j == 68) { //if you have destroyed all 30 you win
                 message = "Victory";
                 stopGame();
             }
@@ -193,7 +204,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
         }
 
 
-        for (int i = 0; i < 60; i++) { //for each of the 30 bricks
+        for (int i = 0; i < 68; i++) { //for each of the 30 bricks
             if ((ball.getRect()).intersects(bricks[i].getRect())) { //checks if the balls has hit a brick
                 int ballLeft = (int)ball.getRect().getMinX();
                 int ballHeight = (int)ball.getRect().getHeight();
