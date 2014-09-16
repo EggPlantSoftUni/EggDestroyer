@@ -60,7 +60,7 @@ public class Paddle extends Sprite implements Commons { //declares the paddle st
 
     public void resetState() { //declares the initial positions of the paddle
         x = 400;
-        y = 660;
+        y = 640;
 
     }
 }
