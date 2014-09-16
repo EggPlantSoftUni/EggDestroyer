@@ -24,6 +24,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
     Ball ball; //declares the ball
     Paddle paddle; //declares the paddle
     Brick bricks[];//declares the sum of bricks as an array(in this game they are [30])
+    CrackedBrick crackedBricks[];
     public int[] count = new int[68];
     int destroyedCount = 0;
     
@@ -56,12 +57,20 @@ public class Board extends JPanel implements Commons { //this contains the game 
         paddle = new Paddle(); //creates the paddle
 
 
-        int k = 0; //this whole things creates the bricks from the array (30 bricks in total)
+        int k = 0;
+        //this whole things creates the bricks from the array (30 bricks in total)
         for (int i = 1; i < 5; i++) { // in 5 rows
             for (int j = 0; j < 17; j++) { //with 6 bricks in each row
+            	if(count[i] == 0){
                 bricks[k] = new Brick(j * 32 + 15, i * 40 + 20); //sets the coordinates of each brick(the first brick is at (30,50) and each brick has a width of 40 and a height of 10
-
                 k++;
+                count[i]++;
+            	}
+            	else{
+            		crackedBricks[k] = new CrackedBrick(j * 32 + 15, i * 40 + 20);
+            		k++;
+            	}
+            		
             }
         }
     }
