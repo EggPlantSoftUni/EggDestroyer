@@ -25,6 +25,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
     Paddle paddle; //declares the paddle
     Brick bricks[];//declares the sum of bricks as an array(in this game they are [30])
     int[] count = new int[68];
+    int destroyedCount = 0;
     
 
     boolean ingame = true; //checks whether an instance of the game is active
