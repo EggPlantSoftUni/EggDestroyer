@@ -10,6 +10,7 @@ public class Sprite { //"The Sprite class is a base class for all objects on the
 	protected int width;
 	protected int heigth;
 	protected Image image;
+	
 
 
     public void setX(int x) { //setsX
