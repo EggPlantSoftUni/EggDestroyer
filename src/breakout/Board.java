@@ -131,7 +131,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
                          (Commons.WIDTH - this.getFontMetrics(font).stringWidth(scorestring)) - 500, //game over message
                          Commons.HEIGTH - 30);
         } else { //if the game has ended
-        	bg.draw(g, this);
+        	bg.draw1(g, this);
         	Font font1 = new Font("Verdana", Font.BOLD, 18); //declares the fond
             FontMetrics metr1 = this.getFontMetrics(font1); //sets the fond
         	g.setColor(Color.BLACK);
