@@ -29,6 +29,7 @@ public class Brick extends Sprite { //the Brick Class
       cracked = false;
     }
 
+
     public boolean isDestroyed() //function that checks whether a brick is destroyed or not
     {
       return destroyed;
@@ -47,4 +48,5 @@ public class Brick extends Sprite { //the Brick Class
     {
       this.cracked = cracked;
     }
+    
 }

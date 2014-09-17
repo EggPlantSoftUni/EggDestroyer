@@ -23,42 +23,34 @@ public class Board extends JPanel implements Commons { //this contains the game 
     Timer timer; //declares the timer
     String message = "Game Over"; //declares the game over message
     Ball ball; //declares the ball
-    Paddle paddle; //declares the paddle
     Bullet bullet;
+    Paddle paddle; //declares the paddle
     Brick bricks[];//declares the sum of bricks as an array(in this game they are [30])
     int[] count = new int[68];
     int destroyedCount = 0;
     int score = 0;
+    String scr = Integer.toString(score);
     ArrayList<Bonus> bonusList;//declares the sum of bricks as an array(in this game they are [30])
     ArrayList<Bullet> bulletList;
     int brickpoints = 10;
     int bonuspoints = 30;
-    
-    
-    Font fontScore = new Font("Verdana", Font.BOLD, 14); //declares the fond
-    FontMetrics metr = this.getFontMetrics(fontScore); //sets the fond
-    
-    Font gameOver = new Font("Verdana", Font.BOLD, 18); //declares the fond
-    FontMetrics metr1 = this.getFontMetrics(gameOver); //sets the fond
-    
+    public boolean isDeath=false;
     
     
     boolean ingame = true; //checks whether an instance of the game is active
     int timerId; //timerID ;_;
 
-    boolean endgame = false;
-    public Board() {
 
-        addKeyListener(new TAdapter());
-        //addKeyListener(new SAdapter());//calls the "TAdapter" to add a key listener
+    public Board() {
+    	
+        addKeyListener(new TAdapter()); //calls the "TAdapter" to add a key listener
         setFocusable(true); //no idea lol
         bricks = new Brick[68]; //sets an array with the number of bricks used
         bonusList = new ArrayList<Bonus>();
-        bulletList = new ArrayList<Bullet>();
         setDoubleBuffered(true); //double buffer set working
         timer = new Timer(); //creates the game timer
-        timer.scheduleAtFixedRate(new ScheduleTask(), 1000, 6); //sets the timer delay to 1000 and the callback time to 10
-
+        timer.scheduleAtFixedRate(new ScheduleTask(), 1000, 5); //sets the timer delay to 1000 and the callback time to 10
+        bulletList = new ArrayList<Bullet>();
     }
 
         public void addNotify() { //no idea lol, has something to do with the class beneath
@@ -71,9 +63,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
         ball = new Ball(); //creates the ball
         paddle = new Paddle(); //creates the paddle
         bg = new Background(0,0);
-        /////////////////////////////////////////////////////////////////////
         bullet = new Bullet();
-        /////////////////////////////////////////////////////////////////////
 
 
         int k = 0; //this whole things creates the bricks from the array (30 bricks in total)
@@ -84,22 +74,22 @@ public class Board extends JPanel implements Commons { //this contains the game 
             }
         }
     }
-    //////////////////////////////////////////////////////////////////////////////////
     public void shots(){
-		if (bullet.isShot()){
-			Bullet bullet1 = new Bullet();
-			bullet1.setX(paddle.getX() + (paddle.getWidth() - bullet1.getWidth()) / 2);
-	        bullet1.setY(paddle.getY() + (paddle.getHeight() - bullet1.getHeight()) / 2);
-	        bulletList.add(bullet1);
-		}
-	}
-    //////////////////////////////////////////////////////////////////////////////////
+    	  if (bullet.isShot()){
+    	   Bullet bullet1 = new Bullet();
+    	   bullet1.setX(paddle.getX() + (paddle.getWidth() - bullet1.getWidth()) / 2);
+    	         bullet1.setY(paddle.getY() + (paddle.getHeight() - bullet1.getHeight()) / 2);
+    	         bulletList.add(bullet1);
+    	  }
+	 }
+
 
     public void paint(Graphics g) { //function for painting and displaying
         super.paint(g);
 
         if (ingame) { //paints/repaints if the game is in process (refer to "in game")
-        	bg.draw(g, this);       
+        	g.drawImage(bg.getImage(), bg.getX(), bg.getY(), //draws the paddle
+                    bg.getWidth(), bg.getHeight(), this);         
 
         	for (int i = 0; i < 68; i++) { //for each of the 30 bricks
                 if (!bricks[i].isDestroyed()){ 
@@ -111,43 +101,53 @@ public class Board extends JPanel implements Commons { //this contains the game 
                 	}
                 }       	
             }
-            
-            for (Bonus bonum : bonusList)
-            	bonum.draw(g,  this);
-            
+        
+            for (int i = 0; i < bonusList.size(); i++) {
+				isDeath = false;
+            	if( i % 3 == 0 ){
+            	
+					bonusList.get(i).draw(g, this);
+					isDeath = false;
+            	}
+				else{
+			
+					isDeath = true;
+					bonusList.get(i).draw1(g, this);
+				}
+			}
             for (Bullet bul : bulletList)
-            		bul.draw(g,  this);
-			            
+                bul.draw(g,  this);
+			
+            	
+			
+            
         	paddle.draw(g, this);
         	ball.draw(g, this);
-        	String scoreString ="Score: " + Integer.toString(score);
+        	String scorestring ="Score: " + Integer.toString(score);
+        	Font font = new Font("Verdana", Font.BOLD, 14); //declares the fond
+            FontMetrics metr = this.getFontMetrics(font); //sets the fond
         	g.setColor(Color.RED);
-            g.setFont(fontScore);
-            g.drawString(scoreString,
-                         (Commons.WIDTH - this.getFontMetrics(fontScore).stringWidth(scoreString)) - 500, //game over message
+            g.setFont(font);
+            g.drawString(scorestring,
+                         (Commons.WIDTH - this.getFontMetrics(font).stringWidth(scorestring)) - 500, //game over message
                          Commons.HEIGTH - 30);
         } else { //if the game has ended
-        	bg.draw(g, this);
-        	String scoreString ="Score: " + Integer.toString(score);
-        	g.setColor(Color.RED);
-            g.setFont(fontScore);
-            g.drawString(scoreString,
-                         (Commons.WIDTH - this.getFontMetrics(fontScore).stringWidth(scoreString)) - 500, //game over message
-                         Commons.HEIGTH - 30);
-        	
+
+        	Font font1 = new Font("Verdana", Font.BOLD, 18); //declares the fond
+            FontMetrics metr1 = this.getFontMetrics(font1); //sets the fond
         	g.setColor(Color.BLACK);
-            g.setFont(gameOver);
+            g.setFont(font1);
             g.drawString(message,
                          (Commons.WIDTH - metr1.stringWidth(message)) / 2, //game over message
                          Commons.WIDTH / 2);
         }
+
         Toolkit.getDefaultToolkit().sync();
-        g.dispose(); //stops drawing
+        g.dispose(); //toolkit no fucking idea 
     }
-    
 
-	private class TAdapter extends KeyAdapter { //TAdapter extending the KeyAdapter
-
+    private class TAdapter extends KeyAdapter { //TAdapter extending the KeyAdapter
+    	
         public void keyReleased(KeyEvent e) { //catches the key release
             paddle.keyReleased(e);
             bullet.keyReleased(e);
@@ -157,20 +157,9 @@ public class Board extends JPanel implements Commons { //this contains the game 
             paddle.keyPressed(e);
             bullet.keyPressed(e);
         }
-	}
-	/*private class SAdapter extends KeyAdapter { //TAdapter extending the KeyAdapter
+    }
 
-        public void keyReleased(KeyEvent e) { //catches the key release
-            bullet.keyReleased(e);
-        }
 
-        public void keyPressed(KeyEvent e) { //catches the key release
-            bullet.keyPressed(e);
-        }
-	}*/
-
-	//here is where we create the bullet
-	
     class ScheduleTask extends TimerTask { //for each call of the timer it calls these function
 
         public void run() { //runs them (calls them), these are called every 10 msecs
@@ -178,12 +167,13 @@ public class Board extends JPanel implements Commons { //this contains the game 
             ball.move(); //ball moves
             paddle.move();
             shots();
+            for (Bullet bul : bulletList)
+                bul.move();
             for (Bonus bonus : bonusList)
                	bonus.move();
-            for (Bullet bul : bulletList)
-            	bul.move();
             checkCollision(); //checks for a collision
             repaint(); //repaints the new screen with new position and remaining bricks
+            
 
         }
     }
@@ -194,7 +184,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
     }
 
 
-    public void checkCollision() { //checks for collision - here we destroy eggs
+    public void checkCollision() { //checks for collision
 
         if (ball.getRect().getMaxY() > Commons.BOTTOM) { //gets the max y of  ball and checks if it has reached the end of the screen
             stopGame(); //Game Over
@@ -251,8 +241,14 @@ public class Board extends JPanel implements Commons { //this contains the game 
         for (int index = bonusList.size() - 1; 0 <= index; index--) {
         	Bonus bonus = bonusList.get(index);
             if ((bonus.getRect()).intersects(paddle.getRect())) {
+            	if( isDeath ){
+            		message = "Game Over!!! U suCK!!";
+                    stopGame();
+            	}
+            	else{
             	score += bonuspoints;
             	bonusList.remove(index);
+            	}
             }
             else if (bonus.getRect().getMaxY() > Commons.BOTTOM) {
             	bonusList.remove(index);
@@ -313,14 +309,14 @@ public class Board extends JPanel implements Commons { //this contains the game 
 
                         brick.setDestroyed(true); //destroys the brick
                         score += brickpoints;
-                        
                         Random rand = new Random();
-                        if (rand.nextInt(4) == 0) {
+                        if (rand.nextInt(1) == 0) {
     	                    Bonus bonus = new Bonus();
     	                    bonus.setX(brick.getX() + (brick.getWidth() - bonus.getWidth()) / 2);
     	                    bonus.setY(brick.getY() + (brick.getHeight() - bonus.getHeight()) / 2);
     	                    bonusList.add(bonus);
                         }
+                        
                 }
             }
         }

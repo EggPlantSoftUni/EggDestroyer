@@ -9,11 +9,12 @@ public class Bullet extends Sprite { //holds the definitions of ball
    private int ybdir;
    private int xbdir;
    protected String bullet = "../images/ball.png"; //declares the path of the ball image
-   private static boolean shot = false;
+   public static boolean shot = false;
+   
+   
    public Bullet() { 
 
      ybdir = -2; //sets the initial motion of the ball upward (-1y direction == up
-     xbdir = 0;
 
      ImageIcon ii = new ImageIcon(this.getClass().getResource(bullet)); //creates the used icon for the ball
      image = ii.getImage(); //calls the "getImage" function to display it
@@ -21,6 +22,7 @@ public class Bullet extends Sprite { //holds the definitions of ball
      width = image.getWidth(null); //sets the width of the ball
      heigth = image.getHeight(null); //sets the heights of the ball
      shot = false;
+     
     }
    
    public void keyPressed (KeyEvent e) { //sets the motion of the balls
@@ -47,11 +49,13 @@ public class Bullet extends Sprite { //holds the definitions of ball
    }
    
    
+   
 
     public void move() //class for ball motion
     {
-      y += ybdir; //same as 
       x += xbdir;
+      y += ybdir; //same as x
+
     }
     public int getYBDir() //checks the direction in the y place and returns it
     {

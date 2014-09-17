@@ -1,6 +1,5 @@
 package breakout;
-import javax.swing.*;	
-
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -8,7 +7,7 @@ import javax.swing.JFrame;
 
 public class Breakout extends JFrame {
 
-	public Breakout() //creates the window frame and names it
+    public Breakout() //creates the window frame and names it
     {
         add(new Board()); //creation
         setTitle("Breakout"); //naming
@@ -19,8 +18,8 @@ public class Breakout extends JFrame {
         setResizable(false); //you can't reside the window
         setVisible(true); //you can see the window
     }
+
     public static void main(String[] args) { //main
-        new Breakout(); //calls the game
-        
+        new Breakout(); //calls the game 
     }
 }
