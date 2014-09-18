@@ -13,7 +13,6 @@ public class Sound {
     	
     	String str = "Sound.wav";
         File sound = new File(str);
-		URL music = new URL("http://www.soundjay.com/button/beep-07.wav");
         Clip clip = AudioSystem.getClip();
         // getAudioInputStream() also accepts a File or InputStream
         AudioInputStream ais = AudioSystem.getAudioInputStream(sound);
