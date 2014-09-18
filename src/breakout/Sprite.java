@@ -11,8 +11,13 @@ public class Sprite { //"The Sprite class is a base class for all objects on the
 	protected int y;
 	protected int width;
 	protected int heigth;
+	protected int width1;
+	protected int heigth1;
+	protected int width2;
+	protected int heigth2;
 	protected Image image;
 	protected Image image1;
+	protected Image image2;
 
     public void setX(int x) { //setsX
         this.x = x;
@@ -37,6 +42,22 @@ public class Sprite { //"The Sprite class is a base class for all objects on the
     public int getHeight() { //like the above but with Height
         return heigth;
     }
+    
+    public int getWidth1() { //gets the width in pixes(used for bricks, etc)
+        return width1;
+    }
+
+    public int getHeight1() { //like the above but with Height
+        return heigth1;
+    }
+    
+    public int getWidth2() { //gets the width in pixes(used for bricks, etc)
+        return width2;
+    }
+
+    public int getHeight2() { //like the above but with Height
+        return heigth2;
+    }
 
     public Image getImage() //accesses the image and returns it
     {
@@ -46,6 +67,11 @@ public class Sprite { //"The Sprite class is a base class for all objects on the
     public Image getImage1() //accesses the image and returns it
     {
       return image1;
+    }
+    
+    public Image getImage2() //accesses the image and returns it
+    {
+      return image2;
     }
 
     public Rectangle getRect() //used for brick
@@ -61,6 +87,12 @@ public class Sprite { //"The Sprite class is a base class for all objects on the
           image1.getWidth(null), image1.getHeight(null));
       
     }
+    public Rectangle getRect2() //used for brick
+    {
+      return new Rectangle(x, y, 
+          image2.getWidth(null), image1.getHeight(null));
+      
+    }
     
     public void draw(Graphics g, ImageObserver observer) {
     	if (image != null)
@@ -69,7 +101,12 @@ public class Sprite { //"The Sprite class is a base class for all objects on the
     
     public void draw1(Graphics g, ImageObserver observer) {
     	if (image1 != null)
-    		g.drawImage(image1, x, y, width, heigth, observer);
+    		g.drawImage(image1, x, y, width1, heigth1, observer);
+    }
+    
+    public void draw2(Graphics g, ImageObserver observer) {
+    	if (image2 != null)
+    		g.drawImage(image2, x, y, width2, heigth2, observer);
     }
     
     

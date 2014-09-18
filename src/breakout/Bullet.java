@@ -8,7 +8,7 @@ public class Bullet extends Sprite { //holds the definitions of ball
 
    private int ybdir;
    private int xbdir;
-   protected String bullet = "../images/ball.png"; //declares the path of the ball image
+   protected String bullet = "../images/small_fangbang.png"; //declares the path of the ball image
    public static boolean shot = false;
    
    
@@ -44,7 +44,7 @@ public class Bullet extends Sprite { //holds the definitions of ball
    }
    
    
-   public static boolean isShot (){
+   public boolean isShot (){
 	   return shot;
    }
    

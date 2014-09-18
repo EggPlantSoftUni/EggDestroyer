@@ -20,7 +20,8 @@ import javax.swing.JPanel;
 public class Board extends JPanel implements Commons { //this contains the game design, mechanics and logic
 	private Background bg;
     Image ii; //declares the image
-    Timer timer; //declares the timer
+    Timer timer;
+    Timer blinkTimer;//declares the timer
     String message = "Game Over"; //declares the game over message
     Ball ball; //declares the ball
     Bullet bullet;
@@ -31,10 +32,18 @@ public class Board extends JPanel implements Commons { //this contains the game 
     int score = 0;
     String scr = Integer.toString(score);
     ArrayList<Bonus> bonusList;//declares the sum of bricks as an array(in this game they are [30])
+    ArrayList<Bonus> bonusList1;
+    ArrayList<Bonus> bonusList2;
     ArrayList<Bullet> bulletList;
     int brickpoints = 10;
     int bonuspoints = 30;
     public boolean isDeath=false;
+    public boolean isShoot=false;
+    public boolean readyToShoot = false;
+    int bulletsShot = 0;
+    Sound play;
+    String scoreMsg = "your Score: ";
+    String fangBang = "FANGBANG!!!";
     
     
     boolean ingame = true; //checks whether an instance of the game is active
@@ -47,6 +56,8 @@ public class Board extends JPanel implements Commons { //this contains the game 
         setFocusable(true); //no idea lol
         bricks = new Brick[68]; //sets an array with the number of bricks used
         bonusList = new ArrayList<Bonus>();
+        bonusList1 = new ArrayList<Bonus>();
+        bonusList2 = new ArrayList<Bonus>();
         setDoubleBuffered(true); //double buffer set working
         timer = new Timer(); //creates the game timer
         timer.scheduleAtFixedRate(new ScheduleTask(), 1000, 5); //sets the timer delay to 1000 and the callback time to 10
@@ -64,7 +75,13 @@ public class Board extends JPanel implements Commons { //this contains the game 
         paddle = new Paddle(); //creates the paddle
         bg = new Background(0,0);
         bullet = new Bullet();
-
+        try {
+			play = new Sound();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
 
         int k = 0; //this whole things creates the bricks from the array (30 bricks in total)
         for (int i = 1; i < 5; i++) { // in 5 rows
@@ -75,11 +92,14 @@ public class Board extends JPanel implements Commons { //this contains the game 
         }
     }
     public void shots(){
-    	  if (bullet.isShot()){
+    	  if (bullet.isShot() && readyToShoot && bulletsShot < 20){
     	   Bullet bullet1 = new Bullet();
     	   bullet1.setX(paddle.getX() + (paddle.getWidth() - bullet1.getWidth()) / 2);
     	         bullet1.setY(paddle.getY() + (paddle.getHeight() - bullet1.getHeight()) / 2);
     	         bulletList.add(bullet1);
+    	         bulletsShot++;
+    	  } else if(readyToShoot && bulletsShot >= 20){
+    		  readyToShoot = false;
     	  }
 	 }
 
@@ -101,25 +121,44 @@ public class Board extends JPanel implements Commons { //this contains the game 
                 }       	
             }
         
-            for (int i = 0; i < bonusList.size(); i++) {
+            /*for (int i = 0; i < bonusList.size(); i++) {
 				isDeath = false;
-            	if( i % 3 == 0 ){
-            	
+            	if( i % 9 == 0 ){
 					bonusList.get(i).draw(g, this);
 					isDeath = false;
             	}
+            	else if(i % 1 == 0){
+            		bonusList.get(i).draw2(g, this);
+            		isShoot = true;
+            		isDeath = false;
+            	}
 				else{
-			
 					isDeath = true;
 					bonusList.get(i).draw1(g, this);
 				}
+			}*/
+            for (Bonus bonum : bonusList) {
+            	bonum.draw(g, this);
 			}
-            for (Bullet bul : bulletList)
+            for (Bonus bonum : bonusList1) {
+            	bonum.draw1(g, this);
+			}
+            for (Bonus bonum : bonusList2) {
+            	bonum.draw2(g, this);
+			}
+            for (Bullet bul : bulletList){
                 bul.draw(g,  this);
-			
-            	
-			
-            
+			}
+            if (readyToShoot)
+            {
+                    	Font font2 = new Font("Verdana", Font.BOLD, 20); //declares the fond
+                        FontMetrics metr2 = this.getFontMetrics(font2); //sets the fond
+                        g.setColor(Color.RED);
+                        g.setFont(font2);
+                        g.drawString(fangBang,
+                                     (Commons.WIDTH - metr2.stringWidth(fangBang)) / 2, //game over message
+                                     Commons.WIDTH / 2+20);	
+            }
         	paddle.draw(g, this);
         	ball.draw(g, this);
         	String scorestring ="Score: " + Integer.toString(score);
@@ -132,13 +171,21 @@ public class Board extends JPanel implements Commons { //this contains the game 
                          Commons.HEIGTH - 30);
         } else { //if the game has ended
         	bg.draw1(g, this);
-        	Font font1 = new Font("Verdana", Font.BOLD, 18); //declares the fond
+        	Font font1 = new Font("Verdana", Font.BOLD, 35); //declares the fond
             FontMetrics metr1 = this.getFontMetrics(font1); //sets the fond
-        	g.setColor(Color.BLACK);
+         g.setColor(Color.BLACK);
             g.setFont(font1);
             g.drawString(message,
                          (Commons.WIDTH - metr1.stringWidth(message)) / 2, //game over message
-                         Commons.WIDTH / 2);
+                         Commons.WIDTH / 2-10);
+            
+            Font font2 = new Font("Verdana", Font.BOLD, 20); //declares the fond
+            FontMetrics metr2 = this.getFontMetrics(font2); //sets the fond
+         g.setColor(Color.BLACK);
+            g.setFont(font2);
+            g.drawString(scoreMsg + score,
+                         (Commons.WIDTH - metr2.stringWidth(scoreMsg)) / 2, //game over message
+                         Commons.WIDTH / 2+20);
         }
 
         Toolkit.getDefaultToolkit().sync();
@@ -162,7 +209,6 @@ public class Board extends JPanel implements Commons { //this contains the game 
     class ScheduleTask extends TimerTask { //for each call of the timer it calls these function
 
         public void run() { //runs them (calls them), these are called every 10 msecs
-
             ball.move(); //ball moves
             paddle.move();
             shots();
@@ -170,10 +216,12 @@ public class Board extends JPanel implements Commons { //this contains the game 
                 bul.move();
             for (Bonus bonus : bonusList)
                	bonus.move();
+            for (Bonus bonus : bonusList1)
+               	bonus.move();
+            for (Bonus bonus : bonusList2)
+               	bonus.move();
             checkCollision(); //checks for a collision
             repaint(); //repaints the new screen with new position and remaining bricks
-            
-
         }
     }
 
@@ -236,25 +284,37 @@ public class Board extends JPanel implements Commons { //this contains the game 
 
         }
         
-        
         for (int index = bonusList.size() - 1; 0 <= index; index--) {
         	Bonus bonus = bonusList.get(index);
             if ((bonus.getRect()).intersects(paddle.getRect())) {
-            	if( isDeath ){
-            		message = "Game Over!!! U suCK!!";
-                    stopGame();
-            	}
-            	else{
             	score += bonuspoints;
             	bonusList.remove(index);
-            	}
-            }
-            else if (bonus.getRect().getMaxY() > Commons.BOTTOM) {
+            } else if (bonus.getRect().getMaxY() > Commons.BOTTOM) {
             	bonusList.remove(index);
             }
         }
+        for (int index = bonusList1.size() - 1; 0 <= index; index--) {
+        	Bonus bonus = bonusList1.get(index);
+            if ((bonus.getRect()).intersects(paddle.getRect())) {
+            	message = "Game Over!!!";
+            	bonusList1.remove(index);
+                stopGame();
+            } else if (bonus.getRect().getMaxY() > Commons.BOTTOM) {
+            	bonusList1.remove(index);
+            }
+        }
+        for (int index = bonusList2.size() - 1; 0 <= index; index--) {
+        	Bonus bonus = bonusList2.get(index);
+            if ((bonus.getRect()).intersects(paddle.getRect())) {
+            	readyToShoot = true;
+        		bulletsShot = 0;
+        		bonusList2.remove(index);
+            } else if (bonus.getRect().getMaxY() > Commons.BOTTOM) {
+            	bonusList2.remove(index);
+            }
+        }
 
-        for (int i = 0; i < 68; i++) { //for each of the 30 bricks
+        for (int i = 0; i < bricks.length; i++) { //for each of the 30 bricks
             if ((ball.getRect()).intersects(bricks[i].getRect())) { //checks if the balls has hit a brick
                 int ballLeft = (int)ball.getRect().getMinX();
                 int ballHeight = (int)ball.getRect().getHeight();
@@ -268,7 +328,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
                 Point pointBottom =
                     new Point(ballLeft, ballTop + ballHeight + 1); //this is the up side of the bricks
 
-                Brick brick = bricks[i];  
+                Brick brick = bricks[i];
                 if (!brick.isDestroyed()) { //if the brick has not yet been destroyed
                 	if (!brick.isCracked()){
                 		if (brick.getRect().contains(pointRight)) { //sets the motion after the collision left
@@ -309,16 +369,43 @@ public class Board extends JPanel implements Commons { //this contains the game 
                         brick.setDestroyed(true); //destroys the brick
                         score += brickpoints;
                         Random rand = new Random();
-                        if (rand.nextInt(1) == 0) {
+                        if (rand.nextInt(10) == 0) {
     	                    Bonus bonus = new Bonus();
     	                    bonus.setX(brick.getX() + (brick.getWidth() - bonus.getWidth()) / 2);
     	                    bonus.setY(brick.getY() + (brick.getHeight() - bonus.getHeight()) / 2);
     	                    bonusList.add(bonus);
+                        } else if(rand.nextInt(10) == 5){
+                        	Bonus bonus = new Bonus();
+    	                    bonus.setX(brick.getX() + (brick.getWidth() - bonus.getWidth()) / 2);
+    	                    bonus.setY(brick.getY() + (brick.getHeight() - bonus.getHeight()) / 2);
+    	                    bonusList2.add(bonus);
+                        } else if(rand.nextInt(10) == 7){
+                        	Bonus bonus = new Bonus();
+    	                    bonus.setX(brick.getX() + (brick.getWidth() - bonus.getWidth()) / 2);
+    	                    bonus.setY(brick.getY() + (brick.getHeight() - bonus.getHeight()) / 2);
+    	                    bonusList1.add(bonus);
                         }
-                        
                 }
             }
         }
-        
-    }
-}}
+            if(bulletList.size() > 0) {
+            for (int index = bulletList.size() - 1; 0 <= index; index--) {
+            	Bullet bullet = bulletList.get(index);
+            	Brick brick = bricks[i];
+                if ((bullet.getRect()).intersects(bricks[i].getRect()) && !brick.isDestroyed()) {
+                    	if (!brick.isCracked()){
+                	
+                	bulletList.remove(index);
+                	brick.setCracked(true);
+                	
+                	} else{
+                    	score += brickpoints;
+                    	bulletList.remove(index);
+                    	brick.setDestroyed(true);
+                }}
+                else if (bullet.getRect().getMaxY() < 0) {
+                	bulletList.remove(index);
+                }
+            }
+            }
+}}}
