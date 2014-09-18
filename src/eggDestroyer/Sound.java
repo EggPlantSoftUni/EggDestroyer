@@ -1,25 +1,21 @@
 package eggDestroyer;
-import sun.audio.*;
 
 import java.io.*;
+import java.net.URL;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.SourceDataLine;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JTextField;
+import javax.sound.sampled.*;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
-public class Sound extends JFrame{
+public class Sound {
 
-	  AudioFormat audioFormat;
-	  AudioInputStream audioInputStream;
-	  SourceDataLine sourceDataLine;
-	  boolean stopPlayback = false;
-
-	  final JButton stopBtn = new JButton("Stop");
-	  final JButton playBtn = new JButton("Play");
-	  final JTextField textField =
-	                       new JTextField("sound.au");
+    public Sound() throws Exception {
+    	
+    	String str = "Sound.wav";
+        File sound = new File(str);
+        Clip clip = AudioSystem.getClip();
+        AudioInputStream ais = AudioSystem.getAudioInputStream(sound);
+        clip.open(ais);
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
+    }
 }
-

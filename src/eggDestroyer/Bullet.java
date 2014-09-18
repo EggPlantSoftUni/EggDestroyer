@@ -4,61 +4,55 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 
-public class Bullet extends Sprite { //holds the definitions of ball
+public class Bullet extends Sprite {
 
-   private int ybdir;
-   private int xbdir;
-   protected String bullet = "../images/small_fangbang.png"; //declares the path of the ball image
-   public static boolean shot = false;
-   
-   
-   public Bullet() { 
+	private int ybdir;
+	private int xbdir;
+	protected String bullet = "../images/fangbang.png";
+	public static boolean shot = false;
 
-     ybdir = -2; //sets the initial motion of the ball upward (-1y direction == up
+	public Bullet() {
 
-     ImageIcon ii = new ImageIcon(this.getClass().getResource(bullet)); //creates the used icon for the ball
-     image = ii.getImage(); //calls the "getImage" function to display it
+		ybdir = -2; // sets the initial motion of the bullet upward
 
-     width = image.getWidth(null); //sets the width of the ball
-     heigth = image.getHeight(null); //sets the heights of the ball
-     shot = false;
-     
-    }
-   
-   public void keyPressed (KeyEvent e) { //sets the motion of the balls
+		ImageIcon ii = new ImageIcon(this.getClass().getResource(bullet));
+		image = ii.getImage(); // calls the "getImage" function to display it
 
-       int key = e.getKeyCode(); //gets the key pressed
+		width = image.getWidth(null); // sets the width 
+		heigth = image.getHeight(null); // sets the height
+		shot = false;
+	}
 
-       if (key == KeyEvent.VK_SPACE) {
-           shot = true;
-       }
-   }
-   
-   public void keyReleased (KeyEvent e) { //sets the motion of the balls
+	public void keyPressed(KeyEvent e) { // sets the motion
 
-       int key = e.getKeyCode(); //gets the key pressed
+		int key = e.getKeyCode(); // gets the key pressed
 
-       if (key == KeyEvent.VK_SPACE) {
-           shot = false;
-       }
-   }
-   
-   
-   public boolean isShot (){
-	   return shot;
-   }
-   
-   
-   
+		if (key == KeyEvent.VK_SPACE) {
+			shot = true;
+		}
+	}
 
-    public void move() //class for ball motion
-    {
-      x += xbdir;
-      y += ybdir; //same as x
+	public void keyReleased(KeyEvent e) {
 
-    }
-    public int getYBDir() //checks the direction in the y place and returns it
-    {
-      return ybdir;
-    }
+		int key = e.getKeyCode();
+
+		if (key == KeyEvent.VK_SPACE) {
+			shot = false;
+		}
+	}
+
+	public boolean isShot() {
+		return shot;
+	}
+
+	public void move() // class for bullet motion
+	{
+		x += xbdir;
+		y += ybdir;
+	}
+
+	public int getYBDir() // checks the direction in the y place and returns it
+	{
+		return ybdir;
+	}
 }

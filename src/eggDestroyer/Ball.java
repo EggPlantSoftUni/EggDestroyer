@@ -20,8 +20,7 @@ public class Ball extends Sprite implements Commons { //holds the definitions of
      heigth = image.getHeight(null); //sets the heights of the ball
      resetState(); //places the ball in its initial position
     }
-
-
+   
     public void move() //class for ball motion
     {
       x += xdir; //each time the timer calls the function the x position is either increases or decreased with a set amount of pixels 
@@ -43,7 +42,7 @@ public class Ball extends Sprite implements Commons { //holds the definitions of
     public void resetState() //declares the initial position of the ball
     {
       x = 230;
-      y = 355; //355
+      y = 10;
     }
 
     public void setXDir(int x) //sets the direction of the ball

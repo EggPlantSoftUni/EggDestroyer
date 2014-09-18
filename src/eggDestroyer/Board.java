@@ -21,17 +21,15 @@ public class Board extends JPanel implements Commons { //this contains the game 
 	private Background bg;
     Image ii; //declares the image
     Timer timer;
-    Timer blinkTimer;//declares the timer
     String message = "Game Over"; //declares the game over message
     Ball ball; //declares the ball
     Bullet bullet;
-    Paddle paddle; //declares the paddle
-    Brick bricks[];//declares the sum of bricks as an array(in this game they are [30])
+    Bone bone; //declares the bone
+    Egg eggs[];//declares the sum of bricks as an array(in this game they are [68])
     int[] count = new int[68];
-    int destroyedCount = 0;
     int score = 0;
     String scr = Integer.toString(score);
-    ArrayList<Bonus> bonusList;//declares the sum of bricks as an array(in this game they are [30])
+    ArrayList<Bonus> bonusList;
     ArrayList<Bonus> bonusList1;
     ArrayList<Bonus> bonusList2;
     ArrayList<Bullet> bulletList;
@@ -42,9 +40,12 @@ public class Board extends JPanel implements Commons { //this contains the game 
     public boolean readyToShoot = false;
     int bulletsShot = 0;
     Sound play;
-    String scoreMsg = "your Score: ";
+    SoundBrake brake;
+    String scoreMsg = "Your score: ";
     String fangBang = "FANGBANG!!!";
-    
+    boolean isInvisible = false;
+    boolean victory = false;
+    String vicString = "Victory";
     
     boolean ingame = true; //checks whether an instance of the game is active
     int timerId; //timerID ;_;
@@ -53,8 +54,8 @@ public class Board extends JPanel implements Commons { //this contains the game 
     public Board() {
     	
         addKeyListener(new TAdapter()); //calls the "TAdapter" to add a key listener
-        setFocusable(true); //no idea lol
-        bricks = new Brick[68]; //sets an array with the number of bricks used
+        setFocusable(true);
+        eggs = new Egg[68]; //sets an array with the number of eggs used
         bonusList = new ArrayList<Bonus>();
         bonusList1 = new ArrayList<Bonus>();
         bonusList2 = new ArrayList<Bonus>();
@@ -64,41 +65,40 @@ public class Board extends JPanel implements Commons { //this contains the game 
         bulletList = new ArrayList<Bullet>();
     }
 
-        public void addNotify() { //no idea lol, has something to do with the class beneath
+        public void addNotify() {
             super.addNotify();
             gameInit();
         }
 
-    public void gameInit() { //creates stuff
+    public void gameInit() { //initialize game
 
         ball = new Ball(); //creates the ball
-        paddle = new Paddle(); //creates the paddle
-        bg = new Background(0,0);
+        bone = new Bone(); //creates the bone
+        bg = new Background(0,0); //creates the background
         bullet = new Bullet();
         try {
 			play = new Sound();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         
 
-        int k = 0; //this whole things creates the bricks from the array (30 bricks in total)
+        int k = 0; //this whole things creates the eggs from the array (68 eggs in total)
         for (int i = 1; i < 5; i++) { // in 5 rows
             for (int j = 0; j < 17; j++) { //with 6 bricks in each row
-                bricks[k] = new Brick(j * 32 + 15, i * 40 + 20); //sets the coordinates of each brick(the first brick is at (30,50) and each brick has a width of 40 and a height of 10
+                eggs[k] = new Egg(j * 32 + 15, i * 40 + 20); //sets the coordinates of each egg
                 k++;
             }
         }
     }
     public void shots(){
-    	  if (bullet.isShot() && readyToShoot && bulletsShot < 20){
+    	  if (bullet.isShot() && readyToShoot && bulletsShot < 15){
     	   Bullet bullet1 = new Bullet();
-    	   bullet1.setX(paddle.getX() + (paddle.getWidth() - bullet1.getWidth()) / 2);
-    	         bullet1.setY(paddle.getY() + (paddle.getHeight() - bullet1.getHeight()) / 2);
+    	   bullet1.setX(bone.getX() + (bone.getWidth() - bullet1.getWidth()) / 2);
+    	         bullet1.setY(bone.getY() + (bone.getHeight() - bullet1.getHeight()) / 2);
     	         bulletList.add(bullet1);
     	         bulletsShot++;
-    	  } else if(readyToShoot && bulletsShot >= 20){
+    	  } else if(readyToShoot && bulletsShot >= 15){
     		  readyToShoot = false;
     	  }
 	 }
@@ -110,13 +110,13 @@ public class Board extends JPanel implements Commons { //this contains the game 
         if (ingame) { //paints/repaints if the game is in process (refer to "in game")
         	bg.draw(g, this);        
 
-        	for (int i = 0; i < 68; i++) { //for each of the 30 bricks
-                if (!bricks[i].isDestroyed()){ 
-                	if (!bricks[i].isCracked() && !bricks[i].isDestroyed()){
-                		bricks[i].draw(g,  this);
+        	for (int i = 0; i < 68; i++) { //for each of the 68 eggs
+                if (!eggs[i].isDestroyed()){ 
+                	if (!eggs[i].isCracked() && !eggs[i].isDestroyed()){
+                		eggs[i].draw(g,  this);
                 	}
                 	else{
-                		bricks[i].draw1(g, this);
+                		eggs[i].draw1(g, this);
                 	}
                 }       	
         	}
@@ -135,25 +135,45 @@ public class Board extends JPanel implements Commons { //this contains the game 
 			}
             if (readyToShoot)
             {
-                    	Font font2 = new Font("Verdana", Font.BOLD, 20); //declares the fond
-                        FontMetrics metr2 = this.getFontMetrics(font2); //sets the fond
+                    	Font font2 = new Font("Verdana", Font.BOLD, 20); //declares the font
+                        FontMetrics metr2 = this.getFontMetrics(font2); //sets the font
                         g.setColor(Color.RED);
                         g.setFont(font2);
                         g.drawString(fangBang,
-                                     (Commons.WIDTH - metr2.stringWidth(fangBang)) / 2, //game over message
+                                     (Commons.WIDTH - metr2.stringWidth(fangBang)) / 2, //ready to shoot message
                                      Commons.WIDTH / 2+20);	
             }
-        	paddle.draw(g, this);
+            if(!isInvisible){
+            bone.draw(g, this);}
         	ball.draw(g, this);
-        	String scorestring ="Score: " + Integer.toString(score);
-        	Font font = new Font("Verdana", Font.BOLD, 14); //declares the fond
-            FontMetrics metr = this.getFontMetrics(font); //sets the fond
+        	
+        	String scorestring ="Score: " + Integer.toString(score); //ingame score
+        	Font font = new Font("Verdana", Font.BOLD, 14); //declares the font
+            FontMetrics metr = this.getFontMetrics(font); //sets the font
         	g.setColor(Color.RED);
             g.setFont(font);
             g.drawString(scorestring,
                          (Commons.WIDTH - this.getFontMetrics(font).stringWidth(scorestring)) - 500, //game over message
                          Commons.HEIGTH - 30);
-        } else { //if the game has ended
+        }else if(victory){
+        	bg.draw2(g, this);
+        	Font font1 = new Font("Verdana", Font.BOLD, 35); //declares the fond
+            FontMetrics metr1 = this.getFontMetrics(font1); //sets the fond
+         g.setColor(Color.RED);
+            g.setFont(font1);
+            g.drawString(vicString,
+                         (Commons.WIDTH - metr1.stringWidth(vicString)) / 2, //victory message
+                         Commons.WIDTH / 2-10);
+            
+            Font font2 = new Font("Verdana", Font.BOLD, 20); //declares the fond
+            FontMetrics metr2 = this.getFontMetrics(font2); //sets the fond
+         g.setColor(Color.RED);
+            g.setFont(font2);
+            g.drawString(scoreMsg + score,
+                         (Commons.WIDTH - metr2.stringWidth(scoreMsg)) / 2, //victory score
+                         Commons.WIDTH / 2+20);
+        } 
+        else { //if the game has ended
 
         	bg.draw1(g, this);
         	Font font1 = new Font("Verdana", Font.BOLD, 35); //declares the fond
@@ -174,18 +194,18 @@ public class Board extends JPanel implements Commons { //this contains the game 
         }
 
         Toolkit.getDefaultToolkit().sync();
-        g.dispose(); //toolkit no fucking idea 
+        g.dispose(); //stops drawing
     }
 
     private class TAdapter extends KeyAdapter { //TAdapter extending the KeyAdapter
     	
         public void keyReleased(KeyEvent e) { //catches the key release
-            paddle.keyReleased(e);
+            bone.keyReleased(e);
             bullet.keyReleased(e);
         }
 
         public void keyPressed(KeyEvent e) { //catches the key release
-            paddle.keyPressed(e);
+            bone.keyPressed(e);
             bullet.keyPressed(e);
         }
     }
@@ -195,7 +215,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
 
         public void run() { //runs them (calls them), these are called every 10 msecs
             ball.move(); //ball moves
-            paddle.move();
+            bone.move();
             shots();
             for (Bullet bul : bulletList)
                 bul.move();
@@ -221,22 +241,22 @@ public class Board extends JPanel implements Commons { //this contains the game 
         if (ball.getRect().getMaxY() > Commons.BOTTOM) { //gets the max y of  ball and checks if it has reached the end of the screen
             stopGame(); //Game Over
         }
-        for (int i = 0, j = 0; i < 68; i++) { //counts the destroyed bricks
-            if (bricks[i].isDestroyed()) {
+        for (int i = 0, j = 0; i < 68; i++) { //counts the destroyed eggs
+            if (eggs[i].isDestroyed()) {
                 j++;
             }
-            if (j == 68) { //if you have destroyed all 30 you win
-                message = "Victory";
-                stopGame();
+            if (j == 68) { //if you have destroyed all 68 eggs you win
+                victory = true;
+               stopGame();
             }
         }
 
-        if ((ball.getRect()).intersects(paddle.getRect())) { //if the ball and paddle intersect the motion is changed
+        if ((ball.getRect()).intersects(bone.getRect())) { //if the ball and bone intersect the motion is changed
 
-            int paddleLPos = (int)paddle.getRect().getMinX(); //gets the min x of the paddle
+            int paddleLPos = (int)bone.getRect().getMinX(); //gets the min x of the bone
             int ballLPos = (int)ball.getRect().getMinX(); //gets the min x of the ball
 
-            int first = paddleLPos + 8; //splits the paddle into 4 parts that will give the ball a different direction
+            int first = paddleLPos + 8; //splits the bone into 4 parts that will give the ball a different direction
             int second = paddleLPos + 16;
             int third = paddleLPos + 24;
             int fourth = paddleLPos + 32;
@@ -271,7 +291,7 @@ public class Board extends JPanel implements Commons { //this contains the game 
         
         for (int index = bonusList.size() - 1; 0 <= index; index--) {
         	Bonus bonus = bonusList.get(index);
-            if ((bonus.getRect()).intersects(paddle.getRect())) {
+            if ((bonus.getRect()).intersects(bone.getRect())) {
             	score += bonuspoints;
             	bonusList.remove(index);
             } else if (bonus.getRect().getMaxY() > Commons.BOTTOM) {
@@ -280,17 +300,16 @@ public class Board extends JPanel implements Commons { //this contains the game 
         }
         for (int index = bonusList1.size() - 1; 0 <= index; index--) {
         	Bonus bonus = bonusList1.get(index);
-            if ((bonus.getRect()).intersects(paddle.getRect())) {
-            	message = "Game Over!!!";
+            if ((bonus.getRect()).intersects(bone.getRect())) {
+            	isInvisible = true;
             	bonusList1.remove(index);
-                stopGame();
             } else if (bonus.getRect().getMaxY() > Commons.BOTTOM) {
             	bonusList1.remove(index);
             }
         }
         for (int index = bonusList2.size() - 1; 0 <= index; index--) {
         	Bonus bonus = bonusList2.get(index);
-            if ((bonus.getRect()).intersects(paddle.getRect())) {
+            if ((bonus.getRect()).intersects(bone.getRect())) {
             	readyToShoot = true;
         		bulletsShot = 0;
         		bonusList2.remove(index);
@@ -299,22 +318,22 @@ public class Board extends JPanel implements Commons { //this contains the game 
             }
         }
 
-        for (int i = 0; i < bricks.length; i++) { //for each of the 30 bricks
-            if ((ball.getRect()).intersects(bricks[i].getRect())) { //checks if the balls has hit a brick
+        for (int i = 0; i < eggs.length; i++) { //for each of the 68 eggs
+            if ((ball.getRect()).intersects(eggs[i].getRect())) { //checks if the balls has hit a egg
                 int ballLeft = (int)ball.getRect().getMinX();
                 int ballHeight = (int)ball.getRect().getHeight();
                 int ballWidth = (int)ball.getRect().getWidth();
                 int ballTop = (int)ball.getRect().getMinY();
 
                 Point pointRight =
-                    new Point(ballLeft + ballWidth + 1, ballTop); //the is the left side of the bricks
-                Point pointLeft = new Point(ballLeft - 1, ballTop); //the is the right side of the bricks
-                Point pointTop = new Point(ballLeft, ballTop - 1); //this is the down side of the bricks
+                    new Point(ballLeft + ballWidth + 1, ballTop); //the is the left side of the eggs
+                Point pointLeft = new Point(ballLeft - 1, ballTop); //the is the right side of the eggs
+                Point pointTop = new Point(ballLeft, ballTop - 1); //this is the down side of the eggs
                 Point pointBottom =
-                    new Point(ballLeft, ballTop + ballHeight + 1); //this is the up side of the bricks
+                    new Point(ballLeft, ballTop + ballHeight + 1); //this is the up side of the eggs
 
-                Brick brick = bricks[i];
-                if (!brick.isDestroyed()) { //if the brick has not yet been destroyed
+                Egg brick = eggs[i];
+                if (!brick.isDestroyed()) { //if the egg has not yet been destroyed
                 	if (!brick.isCracked()){
                 		if (brick.getRect().contains(pointRight)) { //sets the motion after the collision left
                             ball.setXDir(-1);
@@ -332,7 +351,8 @@ public class Board extends JPanel implements Commons { //this contains the game 
                             ball.setYDir(-1);
                         }
 
-                        brick.setCracked(true); //destroys the brick
+                        brick.setCracked(true); //destroys the egg
+                        
                 	}
                 	else {
                 		if (brick.getRect1().contains(pointRight)) { //sets the motion after the collision left
@@ -351,8 +371,13 @@ public class Board extends JPanel implements Commons { //this contains the game 
                             ball.setYDir(-1);
                         }
 
-                        brick.setDestroyed(true); //destroys the brick
+                        brick.setDestroyed(true); //destroys the egg
                         score += brickpoints;
+                        try {
+            				brake = new SoundBrake();
+            			} catch (Exception e) {
+            				e.printStackTrace();
+            			}
                         Random rand = new Random();
                         if (rand.nextInt(10) == 0) {
     	                    Bonus bonus = new Bonus();
@@ -376,8 +401,8 @@ public class Board extends JPanel implements Commons { //this contains the game 
             if(bulletList.size() > 0) {
             for (int index = bulletList.size() - 1; 0 <= index; index--) {
             	Bullet bullet = bulletList.get(index);
-            	Brick brick = bricks[i];
-                if ((bullet.getRect()).intersects(bricks[i].getRect()) && !brick.isDestroyed()) {
+            	Egg brick = eggs[i];
+                if ((bullet.getRect()).intersects(eggs[i].getRect()) && !brick.isDestroyed()) {
                     	if (!brick.isCracked()){
                 	
                 	bulletList.remove(index);
@@ -387,6 +412,11 @@ public class Board extends JPanel implements Commons { //this contains the game 
                     	score += brickpoints;
                     	bulletList.remove(index);
                     	brick.setDestroyed(true);
+                    	/*try {
+            				brake = new SoundBrake();
+            			} catch (Exception e) {
+            				e.printStackTrace();
+            			}*/
                 }}
                 else if (bullet.getRect().getMaxY() < 0) {
                 	bulletList.remove(index);

@@ -35,7 +35,7 @@ public class Sprite { //"The Sprite class is a base class for all objects on the
         return y;
     }
 
-    public int getWidth() { //gets the width in pixes(used for bricks, etc)
+    public int getWidth() { //gets the width in pixels
         return width;
     }
 
@@ -43,7 +43,7 @@ public class Sprite { //"The Sprite class is a base class for all objects on the
         return heigth;
     }
     
-    public int getWidth1() { //gets the width in pixes(used for bricks, etc)
+    public int getWidth1() { //gets the width in pixels
         return width1;
     }
 
@@ -51,7 +51,7 @@ public class Sprite { //"The Sprite class is a base class for all objects on the
         return heigth1;
     }
     
-    public int getWidth2() { //gets the width in pixes(used for bricks, etc)
+    public int getWidth2() { //gets the width in pixels
         return width2;
     }
 
@@ -74,20 +74,20 @@ public class Sprite { //"The Sprite class is a base class for all objects on the
       return image2;
     }
 
-    public Rectangle getRect() //used for brick
+    public Rectangle getRect()
     {
       return new Rectangle(x, y, 
           image.getWidth(null), image.getHeight(null));
       
     }
     
-    public Rectangle getRect1() //used for brick
+    public Rectangle getRect1()
     {
       return new Rectangle(x, y, 
           image1.getWidth(null), image1.getHeight(null));
       
     }
-    public Rectangle getRect2() //used for brick
+    public Rectangle getRect2()
     {
       return new Rectangle(x, y, 
           image2.getWidth(null), image1.getHeight(null));
