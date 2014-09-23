@@ -42,7 +42,7 @@ public class Ball extends Sprite implements Commons { //holds the definitions of
     public void resetState() //declares the initial position of the ball
     {
       x = 230;
-      y = 10;//355;
+      y = 10;
     }
 
     public void setXDir(int x) //sets the direction of the ball
@@ -59,4 +59,5 @@ public class Ball extends Sprite implements Commons { //holds the definitions of
     {
       return ydir;
     }
+
 }

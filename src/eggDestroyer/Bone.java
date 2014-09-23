@@ -62,4 +62,5 @@ public class Bone extends Sprite implements Commons { //declares the bone stuff
         y = 640;
 
     }
+
 }

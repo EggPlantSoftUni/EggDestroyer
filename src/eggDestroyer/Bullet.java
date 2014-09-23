@@ -55,4 +55,5 @@ public class Bullet extends Sprite {
 	{
 		return ybdir;
 	}
+
 }

@@ -30,4 +30,5 @@ public class EggDestroyer extends JFrame {
     public static void main(String[] args) throws Exception { //main
         new EggDestroyer(); //calls the game
     }
+
 }

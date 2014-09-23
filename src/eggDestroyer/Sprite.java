@@ -109,5 +109,5 @@ public class Sprite { //"The Sprite class is a base class for all objects on the
     		g.drawImage(image2, x, y, width2, heigth2, observer);
     }
     
-    
+
 }

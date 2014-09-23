@@ -399,28 +399,31 @@ public class Board extends JPanel implements Commons { //this contains the game 
             }
         }
             if(bulletList.size() > 0) {
-            for (int index = bulletList.size() - 1; 0 <= index; index--) {
-            	Bullet bullet = bulletList.get(index);
-            	Egg brick = eggs[i];
-                if ((bullet.getRect()).intersects(eggs[i].getRect()) && !brick.isDestroyed()) {
-                    	if (!brick.isCracked()){
-                	
-                	bulletList.remove(index);
-                	brick.setCracked(true);
-                	
-                	} else{
-                    	score += brickpoints;
-                    	bulletList.remove(index);
-                    	brick.setDestroyed(true);
-                    	/*try {
-            				brake = new SoundBrake();
-            			} catch (Exception e) {
-            				e.printStackTrace();
-            			}*/
-                }}
-                else if (bullet.getRect().getMaxY() < 0) {
-                	bulletList.remove(index);
-                }
+	            for (int index = bulletList.size() - 1; 0 <= index; index--) {
+	            	Bullet bullet = bulletList.get(index);
+	            	Egg brick = eggs[i];
+	                if ((bullet.getRect()).intersects(eggs[i].getRect()) && !brick.isDestroyed()) {
+	                    	if (!brick.isCracked()){
+	                	
+	                	bulletList.remove(index);
+	                	brick.setCracked(true);
+	                	
+	                	} else{
+	                    	score += brickpoints;
+	                    	bulletList.remove(index);
+	                    	brick.setDestroyed(true);
+	                    	/*try {
+	            				brake = new SoundBrake();
+	            			} catch (Exception e) {
+	            				e.printStackTrace();
+	            			}*/
+	                }}
+	                else if (bullet.getRect().getMaxY() < 0) {
+	                	bulletList.remove(index);
+	                }
+	            }
             }
-            }
-}}}
+            
+        }
+        }
+    }
