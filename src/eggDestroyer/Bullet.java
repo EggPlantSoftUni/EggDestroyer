@@ -18,7 +18,7 @@ public class Bullet extends Sprite {
 		ImageIcon ii = new ImageIcon(this.getClass().getResource(bullet));
 		image = ii.getImage(); // calls the "getImage" function to display it
 
-		width = image.getWidth(null); // sets the width 
+		width = image.getWidth(null); // sets the width
 		heigth = image.getHeight(null); // sets the height
 		shot = false;
 	}
